@@ -1,49 +1,69 @@
 import {useState} from 'react';
-import {StyleSheet, Pressable, View, Text} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import {manipulateAsync, SaveFormat} from 'expo-image-manipulator';
 import {useCameraPermissions, useMediaLibraryPermissions} from "expo-image-picker";
 import {GalleryView} from "./Features/Gallery/GalleryView";
 import {OneRow, Row, ThreeRow, TwoRow} from "./Features/Gallery/Types/Rows";
-import {MediaItem} from "./Features/Gallery/Types/Items";
+import {MediaItem, MediaKind} from "./Features/Gallery/Types/Items";
+import {CameraRoll} from "@react-native-camera-roll/camera-roll";
+// import MapLibreGL from '@maplibre/maplibre-react-native';
 
 export default function App() {
+    // MapLibreGL.setAccessToken(null);
+
     const [rows, setRows] = useState<Row[]>([])
     const [permissionResponse] = MediaLibrary.usePermissions({request: true, get: true});
     const [ip] = useCameraPermissions({get: true});
     const [im] = useMediaLibraryPermissions({get: true, request: true});
+
     const findPhotosAsync = async () => {
-        const p = await MediaLibrary.getAssetsAsync({first: 50, mediaType: 'photo'});
-        const images: string[] = [];
+        const photos = await CameraRoll.getPhotos({
+            first: 10,
+            assetType: 'All',
+            include: ['imageSize', 'location', 'orientation']
+        });
+        const p = await MediaLibrary.getAssetsAsync({first: 2, mediaType: 'video'});
+        const medias: MediaItem[] = [];
         for (let i = 0; i < p.assets.length; i++) {
-            const resized = await manipulateAsync(p.assets[i].uri, [{
-                resize: {
-                    height: 400,
-                    width: 400
-                }
-            }], {compress: 0.5, format: SaveFormat.JPEG});
-            images.push(resized.uri);
+            const asset = p.assets[i];
+            let mediaItems: MediaItem;
+            if (asset.mediaType === 'video') {
+                       mediaItems=new MediaItem(asset.uri,MediaKind.video);
+            } else if (asset.mediaType === 'photo') {
+                const resized = await manipulateAsync(p.assets[i].uri, [{
+                    resize: {
+                        height: 400,
+                        width: 400
+                    }
+                }], {compress: 0.5, format: SaveFormat.JPEG});
+                mediaItems = new MediaItem(resized.uri, MediaKind.image);
+            }
+            else {
+                continue;
+            }
+            medias.push(mediaItems);
         }
         const tmp_rows: Row[] = [...rows];
-        for (let i = 0; i < images.length;) {
+        for (let i = 0; i < medias.length;) {
             let row: Row;
-            if (images.length >= i + 3) {
+            if (medias[i].kind ===MediaKind.video) {
+                //OneRow
+                row = new OneRow([medias[i]]);
+                tmp_rows.push(row);
+                i++;
+            }
+            if (medias.length >= i + 3) {
                 //ThreeRow
-                row = new ThreeRow([new MediaItem(images[i]), new MediaItem(images[i + 1]), new MediaItem(images[i + 2])]);
+                row = new ThreeRow([medias[i], medias[i + 1], medias[i + 2]]);
                 tmp_rows.push(row);
                 i += 3;
             }
-            if (images.length >= i + 2) {
+            if (medias.length >= i + 2) {
                 //TwoRow
-                row = new TwoRow([new MediaItem(images[i]), new MediaItem(images[i + 1])]);
+                row = new TwoRow([medias[i], medias[i + 1]]);
                 tmp_rows.push(row);
                 i += 2;
-            }
-            if (images.length >= i + 1) {
-                //OneRow
-                row = new OneRow([new MediaItem(images[i])]);
-                tmp_rows.push(row);
-                i++;
             }
         }
         console.log(tmp_rows.length);
@@ -57,6 +77,10 @@ export default function App() {
             <Pressable style={styles.button} onPress={async () => await findPhotosAsync()}>
                 <Text style={styles.text}>Picka</Text>
             </Pressable>
+            {/*<MapLibreGL.MapView*/}
+            {/*    style={styles.map}*/}
+            {/*    logoEnabled={false}*/}
+            {/*/>*/}
             <Pressable style={styles.button} onPress={() => clearRows()}>
                 <Text style={styles.text}>Clear</Text>
             </Pressable>
@@ -82,5 +106,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing: 0.25,
         color: 'white',
+    },
+    map: {
+        flex: 1,
+        alignSelf: 'stretch',
     },
 });

@@ -3,9 +3,11 @@ import {Row} from "./Rows";
 
 export class MediaItem {
     source: string;
+    kind: MediaKind;
 
-    constructor(source: string) {
+    constructor(source: string, kind: MediaKind = MediaKind.image ) {
         this.source = source;
+        this.kind = kind;
     }
 }
 
@@ -59,4 +61,8 @@ export enum TransportType {
 export enum Direction {
     rtl,
     ltr
+}
+export enum MediaKind{
+    image,
+    video
 }
