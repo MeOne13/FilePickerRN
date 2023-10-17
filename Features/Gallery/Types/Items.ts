@@ -5,7 +5,7 @@ export class MediaItem {
     source: string;
     kind: MediaKind;
 
-    constructor(source: string, kind: MediaKind = MediaKind.image ) {
+    constructor(source: string, kind: MediaKind = MediaKind.Image ) {
         this.source = source;
         this.kind = kind;
     }
@@ -63,6 +63,6 @@ export enum Direction {
     ltr
 }
 export enum MediaKind{
-    image,
-    video
+    Image,
+    Video
 }

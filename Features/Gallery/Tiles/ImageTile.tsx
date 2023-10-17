@@ -4,20 +4,18 @@ import {OneRow} from "../Types/Rows";
 
 interface ImageTileComponentProps {
     source: string,
-    height: number,
-    width: number
+    // height: number,
+    // width: number
 }
 
-export function ImageTileComponent({source, height, width}: ImageTileComponentProps) {
+export function ImageTile({source}: ImageTileComponentProps) {
     return (
-        <View style={{flexDirection: 'row', height: height, margin: 5, padding: 5}}>
-            {source && <Image
-                cachePolicy='memory-disk'
-                placeholder={null}
-                contentFit='cover'
-                style={{width: width, height: height,}}
-                source={{uri: source}}
-            />}
-        </View>
+        <Image
+            cachePolicy='memory-disk'
+            placeholder={null}
+            contentFit='cover'
+            style={{flex: 1, borderRadius: 5}}
+            source={{uri: source}}
+        />
     );
 }

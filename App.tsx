@@ -6,7 +6,7 @@ import {useCameraPermissions, useMediaLibraryPermissions} from "expo-image-picke
 import {GalleryView} from "./Features/Gallery/GalleryView";
 import {OneRow, Row, ThreeRow, TwoRow} from "./Features/Gallery/Types/Rows";
 import {MediaItem, MediaKind} from "./Features/Gallery/Types/Items";
-import {CameraRoll} from "@react-native-camera-roll/camera-roll";
+// import {CameraRoll} from "@react-native-camera-roll/camera-roll";
 // import MapLibreGL from '@maplibre/maplibre-react-native';
 
 export default function App() {
@@ -18,18 +18,19 @@ export default function App() {
     const [im] = useMediaLibraryPermissions({get: true, request: true});
 
     const findPhotosAsync = async () => {
-        const photos = await CameraRoll.getPhotos({
-            first: 10,
-            assetType: 'All',
-            include: ['imageSize', 'location', 'orientation']
-        });
-        const p = await MediaLibrary.getAssetsAsync({first: 2, mediaType: 'video'});
+        // const photos = await CameraRoll.getPhotos({
+        //     first: 10,
+        //     assetType: 'All',
+        //     include: ['imageSize', 'location', 'orientation']
+        // });
+        const p = await MediaLibrary.getAssetsAsync({first: 20, mediaType: 'photo'});
+        console.log(p.assets.length)
         const medias: MediaItem[] = [];
         for (let i = 0; i < p.assets.length; i++) {
             const asset = p.assets[i];
             let mediaItems: MediaItem;
             if (asset.mediaType === 'video') {
-                       mediaItems=new MediaItem(asset.uri,MediaKind.video);
+                mediaItems = new MediaItem(asset.uri, MediaKind.Video);
             } else if (asset.mediaType === 'photo') {
                 const resized = await manipulateAsync(p.assets[i].uri, [{
                     resize: {
@@ -37,17 +38,17 @@ export default function App() {
                         width: 400
                     }
                 }], {compress: 0.5, format: SaveFormat.JPEG});
-                mediaItems = new MediaItem(resized.uri, MediaKind.image);
-            }
-            else {
+                mediaItems = new MediaItem(resized.uri, MediaKind.Image);
+            } else {
                 continue;
             }
             medias.push(mediaItems);
         }
+
         const tmp_rows: Row[] = [...rows];
         for (let i = 0; i < medias.length;) {
             let row: Row;
-            if (medias[i].kind ===MediaKind.video) {
+            if (medias[i].kind === MediaKind.Video || medias.length >= i+1) {
                 //OneRow
                 row = new OneRow([medias[i]]);
                 tmp_rows.push(row);
