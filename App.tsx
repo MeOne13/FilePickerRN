@@ -5,7 +5,8 @@ import {manipulateAsync, SaveFormat} from 'expo-image-manipulator';
 import {useCameraPermissions, useMediaLibraryPermissions} from "expo-image-picker";
 import {GalleryView} from "./Features/Gallery/GalleryView";
 import {OneRow, Row, ThreeRow, TwoRow} from "./Features/Gallery/Types/Rows";
-import {MediaItem, MediaKind} from "./Features/Gallery/Types/Items";
+import {ImageEntry, MediaKind} from "./Features/Gallery/Types/Items";
+import {MasonryFlashList} from "@shopify/flash-list";
 // import {CameraRoll} from "@react-native-camera-roll/camera-roll";
 // import MapLibreGL from '@maplibre/maplibre-react-native';
 
@@ -25,12 +26,12 @@ export default function App() {
         // });
         const p = await MediaLibrary.getAssetsAsync({first: 20, mediaType: 'photo'});
         console.log(p.assets.length)
-        const medias: MediaItem[] = [];
+        const medias: ImageEntry[] = [];
         for (let i = 0; i < p.assets.length; i++) {
             const asset = p.assets[i];
-            let mediaItems: MediaItem;
+            let mediaItems: ImageEntry;
             if (asset.mediaType === 'video') {
-                mediaItems = new MediaItem(asset.uri, MediaKind.Video);
+                mediaItems = new ImageEntry(asset.uri, MediaKind.Video);
             } else if (asset.mediaType === 'photo') {
                 const resized = await manipulateAsync(p.assets[i].uri, [{
                     resize: {
@@ -38,7 +39,7 @@ export default function App() {
                         width: 400
                     }
                 }], {compress: 0.5, format: SaveFormat.JPEG});
-                mediaItems = new MediaItem(resized.uri, MediaKind.Image);
+                mediaItems = new ImageEntry(resized.uri, MediaKind.Image);
             } else {
                 continue;
             }

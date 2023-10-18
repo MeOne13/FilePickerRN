@@ -1,4 +1,4 @@
-import {AchievementItem, AudioItem, CityItem, Direction, MediaItem, MediaItemsArray, textItem} from "./Items";
+import {AchievementEntry, AudioEntry, CityEntry, Direction, ImageEntry, MediaItemsArray, TextEntry} from "./Items";
 
 export class Row {
     constructor(rowHeight: number = 300, kind: RowKind = RowKind.Two) {
@@ -11,109 +11,109 @@ export class Row {
 }
 
 export class AchievementRow extends Row {
-    constructor(achievements: AchievementItem[], media: MediaItem) {
+    constructor(achievements: AchievementEntry[], media: ImageEntry) {
         super();
         this.achievements = achievements;
         this.media = media;
     }
 
-    achievements: AchievementItem[];
-    media: MediaItem;
+    achievements: AchievementEntry[];
+    media: ImageEntry;
 }
 
 export class CityRow extends Row {
-    cityMark: CityItem;
+    cityMark: CityEntry;
 
-    constructor(city: CityItem) {
+    constructor(city: CityEntry) {
         super();
         this.cityMark = city;
     }
 }
 
 export class TextRow extends Row {
-    constructor(text: textItem) {
+    constructor(text: TextEntry) {
         super(300, RowKind.Text);
         this.textMark = text;
     }
 
-    textMark: textItem;
+    textMark: TextEntry;
 }
 
 export class AudioRow extends Row {
-    constructor(audio: AudioItem) {
+    constructor(audio: AudioEntry) {
         super(100, RowKind.Audio);
         this.audioTrack = audio;
     }
 
-    audioTrack: AudioItem;
+    audioTrack: AudioEntry;
 }
 
 export class OneRow extends Row {
     constructor(items: MediaItemsArray) {
         super(400, RowKind.One);
-        const medias = items.map(i => i as MediaItem);
+        const medias = items.map(i => i as ImageEntry);
         if (medias.length < 1)
             throw new Error('Not enough items in medias array');
         this.Item = medias[0];
     }
 
-    Item: MediaItem;
+    Item: ImageEntry;
 }
 
 export class TwoRow extends Row {
     constructor(items: MediaItemsArray) {
         super(250, RowKind.Two);
-        const medias = items.map(i => i as MediaItem);
+        const medias = items.map(i => i as ImageEntry);
         if (medias.length < 2)
             throw new Error('Not enough items in medias array');
         this.Items = medias;
     }
 
-    Items: MediaItem[];
+    Items: ImageEntry[];
 }
 
 export class OneTwoRow extends Row {
     constructor(items: MediaItemsArray) {
         super(300, RowKind.OneTwo);
-        const medias = items.map(i => i as MediaItem);
+        const medias = items.map(i => i as ImageEntry);
         if (medias.length < 3)
             throw new Error('Not enough items in medias array');
-        this.Big = medias[0] as MediaItem;
-        this.TopSmall = medias[1] as MediaItem;
-        this.BottomSmall = medias[2] as MediaItem;
+        this.Big = medias[0] as ImageEntry;
+        this.TopSmall = medias[1] as ImageEntry;
+        this.BottomSmall = medias[2] as ImageEntry;
     }
 
-    Big: MediaItem;
-    TopSmall: MediaItem;
-    BottomSmall: MediaItem;
+    Big: ImageEntry;
+    TopSmall: ImageEntry;
+    BottomSmall: ImageEntry;
 }
 
 export class TwoOneRow extends Row {
     constructor(items: MediaItemsArray) {
-        const medias = items.map(i => i as MediaItem);
+        const medias = items.map(i => i as ImageEntry);
         if (medias.length < 3)
             throw new Error('Not enough items in medias array');
         super(300, RowKind.TwoOne);
-        this.Big = medias[2] as MediaItem;
-        this.TopSmall = medias[1] as MediaItem;
-        this.BottomSmall = medias[0] as MediaItem;
+        this.Big = medias[2] as ImageEntry;
+        this.TopSmall = medias[1] as ImageEntry;
+        this.BottomSmall = medias[0] as ImageEntry;
     }
 
-    Big: MediaItem;
-    TopSmall: MediaItem;
-    BottomSmall: MediaItem;
+    Big: ImageEntry;
+    TopSmall: ImageEntry;
+    BottomSmall: ImageEntry;
 }
 
 export class ThreeRow extends Row {
     constructor(items: MediaItemsArray) {
         super(150, RowKind.Three);
-        const medias = items.map(i => i as MediaItem);
+        const medias = items.map(i => i as ImageEntry);
         if (medias.length < 3)
             throw new Error('Not enough items in medias array');
         this.Items = medias;
     }
 
-    Items: MediaItem[];
+    Items: ImageEntry[];
 }
 
 

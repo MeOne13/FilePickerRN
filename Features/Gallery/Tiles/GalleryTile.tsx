@@ -1,10 +1,10 @@
 import {DimensionValue, View} from "react-native";
-import {MediaItem, MediaKind} from "../Types/Items";
+import {ImageEntry, MediaKind} from "../Types/Items";
 import {ImageTile} from "./ImageTile";
 import {VideoTile} from "./VideoTile";
 
 interface GalleryTileComponentProps {
-    item: MediaItem,
+    item: ImageEntry,
     width: DimensionValue
 }
 
