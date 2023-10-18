@@ -1,95 +1,129 @@
 //#region Items
-import {Row} from "./Rows";
+import {JournalRow} from "./Rows";
 import uuid from "react-native-uuid";
 
-export abstract class MediaEntry {
-    protected constructor(guid: string, dateTaken: Date, dateOrder: Date | undefined) {
+export abstract class JournalEntry implements  Reacted, Commented{
+    protected constructor(guid: string | undefined, dateTaken: Date | undefined, dateOrder: Date | undefined) {
         if (guid === undefined) {
             guid = uuid.v4().toString();
         }
-        if (dateOrder === undefined){
-            dateOrder=dateTaken;
+        if (dateTaken === undefined) {
+            const utcSeconds = Date.now();
+            dateTaken = new Date(0);
+            dateTaken.setUTCSeconds(utcSeconds);
+        }
+        if (dateOrder === undefined) {
+            dateOrder = dateTaken;
         }
         this.guid = guid;
         this.dateOrder = dateOrder;
         this.dateTaken = dateTaken;
     }
-
+    author: User = new User();
     guid: string;
     dateTaken: Date;
     dateOrder: Date;
+    comments: Comment[] | undefined = undefined;
+    reactions: Reaction[] | undefined = undefined;
+    kind: EntryKind = EntryKind.Image;
 }
 
-export class ImageEntry extends MediaEntry {
+export interface Commented {
+    comments: Comment[] | undefined;
+}
+
+export interface Reacted {
+    reactions: Reaction[] | undefined;
+}
+export interface Oriented {
+    orientation: Orientation;
+}
+
+export class ImageEntry extends JournalEntry implements Oriented{
     fullQualitySourcePath: string;
     compressedSourcePath: string;
+    orientation: Orientation;
 
-    constructor(fullQualitySourcePath: string, compressedSourcePath: string, guid: string, dateTaken: Date, dateOrder: Date | undefined) {
+    constructor(fullQualitySourcePath: string, compressedSourcePath: string, orientation: Orientation = Orientation.Portrait, guid: string | undefined, dateTaken: Date | undefined, dateOrder: Date | undefined) {
         super(guid, dateTaken, dateOrder);
         this.fullQualitySourcePath = fullQualitySourcePath;
         this.compressedSourcePath = compressedSourcePath;
+        this.kind = EntryKind.Image;
+        this.orientation = orientation;
     }
 }
 
-export class VideoEntry extends MediaEntry {
+export class VideoEntry extends JournalEntry implements Oriented {
     fullQualitySourcePath: string;
     compressedSourcePath: string;
     thumbnailPath: string;
+    orientation: Orientation;
 
-    constructor(source: string, kind: MediaKind = MediaKind.Image) {
-        this.source = source;
-        this.kind = kind;
+    constructor(fullQualitySourcePath: string, compressedSourcePath: string, thumbnailPath: string, orientation: Orientation = Orientation.Portrait, guid: string | undefined, dateTaken: Date | undefined, dateOrder: Date | undefined) {
+        super(guid, dateTaken, dateOrder);
+        this.fullQualitySourcePath = fullQualitySourcePath;
+        this.compressedSourcePath = compressedSourcePath;
+        this.thumbnailPath = thumbnailPath;
+        this.kind = EntryKind.Video;
+        this.orientation = orientation;
     }
 }
 
-export class AudioEntry extends MediaEntry {
-    constructor(track: string) {
-        this.track = track;
-    }
-
-    track: string;
-}
-
-export class AchievementEntry extends MediaEntry {
-    achievementUri: string;
-
-    constructor(uri: string) {
-        this.achievementUri = uri;
+export class AudioEntry extends JournalEntry {
+    trackPath: string;
+    constructor(trackPath: string, guid: string | undefined, dateTaken: Date | undefined, dateOrder: Date | undefined) {
+        super(guid, dateTaken, dateOrder);
+        this.trackPath = trackPath;
+        this.kind = EntryKind.Audio;
     }
 }
 
-export class POIEntry extends MediaEntry {
-    Title: string;
+export class AchievementEntry extends JournalEntry {
+    title: string;
 
-    constructor(title: string) {
-        this.Title = title;
+    constructor(title: string, guid: string | undefined, dateTaken: Date | undefined, dateOrder: Date | undefined) {
+        super(guid, dateTaken, dateOrder);
+        this.title = title;
+        this.kind = EntryKind.Achievement;
     }
 }
 
-export class TextEntry extends MediaEntry {
+export class POIEntry extends JournalEntry {
+    title: string;
+
+    constructor(title: string, guid: string | undefined, dateTaken: Date | undefined, dateOrder: Date | undefined) {
+        super(guid, dateTaken, dateOrder);
+        this.title = title;
+        this.kind = EntryKind.POI;
+    }
+}
+
+export class NoteEntry extends JournalEntry {
     text: string
 
-    constructor(author: string, text: string) {
-        this.author = author;
+    constructor(text: string, guid: string | undefined, dateTaken: Date | undefined, dateOrder: Date | undefined) {
+        super(guid, dateTaken, dateOrder);
         this.text = text;
+        this.kind = EntryKind.Note;
     }
 }
 
-export class LocalityEntry extends MediaEntry {
-    localityTitle: string
+export class LocalityEntry extends JournalEntry {
+    title: string;
+    transport: TransportType;
 
-    constructor(cityTitle: string, transport: TransportType) {
-        this.cityTitle = cityTitle;
+    constructor(title: string,transport: TransportType = TransportType.Vehicle, guid: string | undefined, dateTaken: Date | undefined, dateOrder: Date | undefined) {
+        super(guid, dateTaken, dateOrder);
+        this.title = title;
         this.transport = transport;
+        this.kind = EntryKind.Locality;
     }
 }
 
 
 //#endregion Items
 
-export type MediaItemsArray = (ImageEntry | TextEntry | CityEntry | AchievementEntry)[];
-// export type MediaItemsArray = (MediaItem | textItem | CityItem | AchievmentItem)[];
-export type MediaRowsArray = (Row)[];
+export type JournalEntriesArray = JournalEntry[];
 
 export enum TransportType {
     Vehicle,
@@ -97,12 +131,48 @@ export enum TransportType {
     PersonalMobility
 }
 
+export enum Orientation{
+    Portrait,
+    Landscape
+}
+
 export enum Direction {
     rtl,
     ltr
 }
 
-export enum MediaKind {
+export enum EntryKind {
     Image,
-    Video
+    Video,
+    Note,
+    Audio,
+    Achievement,
+    POI,
+    Map,
+    Locality,
+}
+
+export class User {
+    AvatarPath: string | undefined = undefined;
+    Name: string = 'Test User';
+}
+
+export class Comment{
+    author: User | undefined = undefined;
+    content: string = '';
+}
+
+export class Reaction {
+    author: User | undefined = undefined;
+    reaction: ReactionType = ReactionType.Like;
+}
+
+export enum ReactionType {
+    Like,
+    Applause,
+    Cool,
+    ThumbUp,
+    LOL,
+    Sad,
+    Crying
 }

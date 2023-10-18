@@ -13,15 +13,15 @@ export function OneRowComponent({row}: OneRowComponentProps) {
     return (
         <View style={{flex: 1}}>
             {
-                row.Item.kind === MediaKind.Image &&
+                row.entry.kind === MediaKind.Image &&
                 <ImageTile
-                    source={row.Item.source}
+                    source={row.entry.source}
                     // height={400}
                     // width={400}
                 />}
-            {row.Item.kind === MediaKind.Video &&
+            {row.entry.kind === MediaKind.Video &&
                 <VideoTile
-                    source={row.Item.source}
+                    source={row.entry.source}
                     // height={400}
                     // width={400}
                 />}

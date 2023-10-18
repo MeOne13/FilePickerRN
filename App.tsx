@@ -4,7 +4,7 @@ import * as MediaLibrary from 'expo-media-library';
 import {manipulateAsync, SaveFormat} from 'expo-image-manipulator';
 import {useCameraPermissions, useMediaLibraryPermissions} from "expo-image-picker";
 import {GalleryView} from "./Features/Gallery/GalleryView";
-import {OneRow, Row, ThreeRow, TwoRow} from "./Features/Gallery/Types/Rows";
+import {OneRow, JournalRow, ThreeRow, TwoRow} from "./Features/Gallery/Types/Rows";
 import {ImageEntry, MediaKind} from "./Features/Gallery/Types/Items";
 import {MasonryFlashList} from "@shopify/flash-list";
 // import {CameraRoll} from "@react-native-camera-roll/camera-roll";
@@ -13,7 +13,7 @@ import {MasonryFlashList} from "@shopify/flash-list";
 export default function App() {
     // MapLibreGL.setAccessToken(null);
 
-    const [rows, setRows] = useState<Row[]>([])
+    const [rows, setRows] = useState<JournalRow[]>([])
     const [permissionResponse] = MediaLibrary.usePermissions({request: true, get: true});
     const [ip] = useCameraPermissions({get: true});
     const [im] = useMediaLibraryPermissions({get: true, request: true});
@@ -46,9 +46,9 @@ export default function App() {
             medias.push(mediaItems);
         }
 
-        const tmp_rows: Row[] = [...rows];
+        const tmp_rows: JournalRow[] = [...rows];
         for (let i = 0; i < medias.length;) {
-            let row: Row;
+            let row: JournalRow;
             if (medias[i].kind === MediaKind.Video || medias.length >= i+1) {
                 //OneRow
                 row = new OneRow([medias[i]]);

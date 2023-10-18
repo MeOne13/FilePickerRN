@@ -1,7 +1,18 @@
-import {AchievementEntry, AudioEntry, CityEntry, Direction, ImageEntry, MediaItemsArray, TextEntry} from "./Items";
+import {
+    AchievementEntry,
+    AudioEntry,
+    EntryKind,
+    ImageEntry,
+    JournalEntriesArray, LocalityEntry,
+    Orientation,
+    Oriented,
+    POIEntry,
+    NoteEntry,
+    VideoEntry
+} from "./Items";
 
-export class Row {
-    constructor(rowHeight: number = 300, kind: RowKind = RowKind.Two) {
+export abstract class JournalRow {
+    protected constructor(rowHeight: number = 300, kind: RowKind = RowKind.Two) {
         this.rowHeight = rowHeight;
         this.kind = kind;
     }
@@ -10,112 +21,129 @@ export class Row {
     readonly kind: RowKind;
 }
 
-export class AchievementRow extends Row {
-    constructor(achievements: AchievementEntry[], media: ImageEntry) {
-        super();
-        this.achievements = achievements;
-        this.media = media;
-    }
+// export class AchievementRow extends Row {
+//     constructor(achievements: AchievementEntry[], media: ImageEntry) {
+//         super();
+//         this.achievements = achievements;
+//         this.media = media;
+//     }
+//
+//     achievements: AchievementEntry[];
+//     media: ImageEntry;
+// }
 
-    achievements: AchievementEntry[];
-    media: ImageEntry;
+export class LocalityRow extends JournalRow {
+    locality: LocalityEntry;
+
+    constructor(locality: LocalityEntry) {
+        super(100, RowKind.Locality);
+        this.locality = locality;
+    }
 }
 
-export class CityRow extends Row {
-    cityMark: CityEntry;
-
-    constructor(city: CityEntry) {
-        super();
-        this.cityMark = city;
+export class TextRow extends JournalRow {
+    note: NoteEntry;
+    constructor(note: NoteEntry) {
+        super(note.text.length > 300 ? 300 : 200, RowKind.Note);
+        this.note = note;
     }
 }
 
-export class TextRow extends Row {
-    constructor(text: TextEntry) {
-        super(300, RowKind.Text);
-        this.textMark = text;
-    }
-
-    textMark: TextEntry;
-}
-
-export class AudioRow extends Row {
+export class AudioRow extends JournalRow {
+    audio: AudioEntry;
     constructor(audio: AudioEntry) {
         super(100, RowKind.Audio);
-        this.audioTrack = audio;
+        this.audio = audio;
     }
-
-    audioTrack: AudioEntry;
 }
 
-export class OneRow extends Row {
-    constructor(items: MediaItemsArray) {
-        super(400, RowKind.One);
-        const medias = items.map(i => i as ImageEntry);
-        if (medias.length < 1)
+export class OneRow extends JournalRow {
+    constructor(entries: (ImageEntry | VideoEntry)[]) {
+        if (entries.length < 1)
+            throw new Error('Not enough entries in medias array');
+
+        super(entries[0].orientation === Orientation.Portrait ? 400 : 300, RowKind.One);
+        this.entry = entries[0];
+    }
+
+    entry: ImageEntry | VideoEntry;
+}
+
+export class TwoRow extends JournalRow {
+    constructor(entries: (ImageEntry | VideoEntry | AchievementEntry | POIEntry)[]) {
+        if (entries.length < 2)
+            throw new Error('Not enough entries in medias array');
+        const portraitCount = entries.filter(e =>
+            e.kind === EntryKind.POI
+            || e.kind === EntryKind.Achievement
+            || ((e.kind === EntryKind.Image || e.kind === EntryKind.Video) && (e as Oriented).orientation === Orientation.Portrait))
+            .length;
+        let rowHeight = 0;
+        switch (portraitCount) {
+            case 2:
+                rowHeight = 300;
+                break;
+            case 1:
+                rowHeight = 200;
+                break;
+            default:
+                rowHeight = 150;
+                break;
+        }
+        super(rowHeight, RowKind.Two);
+        this.entries = entries.slice(0, 2);
+    }
+
+    entries: (ImageEntry | VideoEntry | AchievementEntry | POIEntry)[];
+}
+
+export class ThreeRow extends JournalRow {
+    constructor(entries: (ImageEntry | VideoEntry | AchievementEntry | POIEntry)[]) {
+        if (entries.length < 3)
             throw new Error('Not enough items in medias array');
-        this.Item = medias[0];
+        super(200, RowKind.Three);
+        this.entries = entries.slice(0, 3);
     }
 
-    Item: ImageEntry;
+    entries: (ImageEntry | VideoEntry | AchievementEntry | POIEntry)[];
 }
-
-export class TwoRow extends Row {
-    constructor(items: MediaItemsArray) {
-        super(250, RowKind.Two);
-        const medias = items.map(i => i as ImageEntry);
-        if (medias.length < 2)
+export class OneTwoRow extends JournalRow {
+    constructor(entries: (ImageEntry | VideoEntry)[]) {
+        if (entries.length < 3)
             throw new Error('Not enough items in medias array');
-        this.Items = medias;
+        let rowHeight = 300;
+        if (entries[0].kind===EntryKind.Video || entries[0].orientation===Orientation.Portrait){
+            rowHeight=400;
+        }
+        super(rowHeight, RowKind.OneTwo);
+        this.big = entries[0];
+        this.topSmall = entries[1];
+        this.bottomSmall = entries[2];
     }
 
-    Items: ImageEntry[];
+    big: ImageEntry | VideoEntry;
+    topSmall: ImageEntry | VideoEntry;
+    bottomSmall: ImageEntry | VideoEntry;
 }
 
-export class OneTwoRow extends Row {
-    constructor(items: MediaItemsArray) {
-        super(300, RowKind.OneTwo);
-        const medias = items.map(i => i as ImageEntry);
-        if (medias.length < 3)
+export class TwoOneRow extends JournalRow {
+    constructor(entries: (ImageEntry | VideoEntry)[]) {
+        if (entries.length < 3)
             throw new Error('Not enough items in medias array');
-        this.Big = medias[0] as ImageEntry;
-        this.TopSmall = medias[1] as ImageEntry;
-        this.BottomSmall = medias[2] as ImageEntry;
+        let rowHeight = 300;
+        if (entries[2].kind===EntryKind.Video || entries[2].orientation===Orientation.Portrait){
+            rowHeight=400;
+        }
+        super(rowHeight, RowKind.TwoOne);
+        this.big = entries[2];
+        this.topSmall = entries[1];
+        this.bottomSmall = entries[0];
     }
 
-    Big: ImageEntry;
-    TopSmall: ImageEntry;
-    BottomSmall: ImageEntry;
+    big: ImageEntry | VideoEntry;
+    topSmall: ImageEntry | VideoEntry;
+    bottomSmall: ImageEntry | VideoEntry;
 }
-
-export class TwoOneRow extends Row {
-    constructor(items: MediaItemsArray) {
-        const medias = items.map(i => i as ImageEntry);
-        if (medias.length < 3)
-            throw new Error('Not enough items in medias array');
-        super(300, RowKind.TwoOne);
-        this.Big = medias[2] as ImageEntry;
-        this.TopSmall = medias[1] as ImageEntry;
-        this.BottomSmall = medias[0] as ImageEntry;
-    }
-
-    Big: ImageEntry;
-    TopSmall: ImageEntry;
-    BottomSmall: ImageEntry;
-}
-
-export class ThreeRow extends Row {
-    constructor(items: MediaItemsArray) {
-        super(150, RowKind.Three);
-        const medias = items.map(i => i as ImageEntry);
-        if (medias.length < 3)
-            throw new Error('Not enough items in medias array');
-        this.Items = medias;
-    }
-
-    Items: ImageEntry[];
-}
-
 
 export enum RowKind {
     One,
@@ -125,8 +153,7 @@ export enum RowKind {
     TwoOne,
     Audio,
     Map,
-    Locaity,
-    Text,
-    Achievement,
-
+    Locality,
+    Note,
+    // Achievement,
 }

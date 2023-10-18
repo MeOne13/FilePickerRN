@@ -1,10 +1,10 @@
-import {Row} from "./Types/Rows";
+import {JournalRow} from "./Types/Rows";
 import {View} from "react-native";
 import {FlashList} from "@shopify/flash-list";
 import {RowComponent} from "./RowComponent";
 
 interface GalleryComponentProps {
-    rows: Row[]
+    rows: JournalRow[]
 }
 
 export function GalleryView({rows}: GalleryComponentProps) {
