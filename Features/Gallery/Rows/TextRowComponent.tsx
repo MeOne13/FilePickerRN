@@ -1,9 +1,9 @@
-import {OneRow, TextRow} from "../Types/Rows";
+import {OneRow, NoteRow} from "../Types/Rows";
 import {View} from "react-native";
 import {Image} from "expo-image";
 
 interface TextRowComponentProps {
-    row: TextRow
+    row: NoteRow
 }
 
 export function TextRowComponent({row}: TextRowComponentProps) {
