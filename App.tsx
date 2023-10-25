@@ -21,7 +21,7 @@ export default function App() {
         // });
         // console.log(assets.assets.length);
         try{
-       const journal = await GetTestJournal();
+    //    const journal = await GetTestJournal();
         }
         catch (ex){
             console.log(ex);
@@ -30,11 +30,12 @@ export default function App() {
     }
     const clearRows = () => {
         setRows([]);
+        console.log('In clear');
     }
     return (
         <View style={{height: 500}}>
             <Pressable style={styles.button} onPress={getJournal}>
-                <Text style={styles.text}>Picka</Text>
+                <Text style={styles.text}>Picka1</Text>
             </Pressable>
             <Pressable style={styles.button} onPress={getJournal}>
                 <Text style={styles.text}>Picka</Text>
@@ -49,7 +50,7 @@ export default function App() {
             <Pressable style={styles.button} onPress={() => clearRows()}>
                 <Text style={styles.text}>Clear</Text>
             </Pressable>
-            {rows.length > 0 &&
+            {rows?.length > 0 &&
                 GalleryView({rows: rows})
             }
         </View>
