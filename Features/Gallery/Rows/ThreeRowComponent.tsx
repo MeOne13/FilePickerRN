@@ -1,35 +1,27 @@
-import {Image} from "expo-image";
 import {View} from "react-native";
-import {ThreeRow, TwoRow} from "../Types/Rows";
+import {ThreeRow} from "../Types/Rows";
+import {GalleryTile} from "../Tiles/GalleryTile";
+import {Orientation} from "../Types/Items";
 
 interface ThreeRowComponentProps {
     row: ThreeRow
 }
 
 export function ThreeRowComponent({row}: ThreeRowComponentProps) {
+    console.log(row.entries.length);
+
+    const leftEntry = row.entries[0];
+    const middleEntry = row.entries[1];
+    const rightEntry = row.entries[2];
+
+    const leftTileFlex = leftEntry.orientation === Orientation.Landscape ? 5 : 3;
+    const middleTileFlex = middleEntry.orientation === Orientation.Landscape ? 5 : 3;
+    const rightTileFlex = rightEntry.orientation === Orientation.Landscape ? 5 : 3;
     return (
         <View style={{flexDirection: 'row', height: row.rowHeight, margin: 5, padding: 5}}>
-            {row.Items[0] && <Image
-                cachePolicy='memory-disk'
-                placeholder={null}
-                contentFit='cover'
-                style={{width: 133, height: row.rowHeight,}}
-                source={{uri: row.Items[0].source}}
-            />}
-            {row.Items[1] && <Image
-                cachePolicy='memory-disk'
-                placeholder={null}
-                contentFit='cover'
-                style={{width: 133, height: row.rowHeight,}}
-                source={{uri: row.Items[1].source}}
-            />}
-            {row.Items[2] && <Image
-                cachePolicy='memory-disk'
-                placeholder={null}
-                contentFit='cover'
-                style={{width: 133, height: row.rowHeight,}}
-                source={{uri: row.Items[2].source}}
-            />}
+            <GalleryTile item={row.entries[0]} tileFlex={leftTileFlex}/>
+            <GalleryTile item={row.entries[1]} tileFlex={middleTileFlex}/>
+            <GalleryTile item={row.entries[2]} tileFlex={rightTileFlex}/>
         </View>
     );
 }

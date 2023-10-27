@@ -41,7 +41,7 @@ export async function GetJournalEntries(guid?: string): Promise<JournalEntry[]> 
     return entries;
 }
 
-async function GetCameraRoll(after: Date | number, before: Date | number, maxCount: number = 100) {
+async function GetCameraRoll(after: Date | number, before: Date | number, maxCount: number = 30) {
     console.log('in camera');
 
     const thumbsDirectory = FileSystem.documentDirectory + '0-500/';
@@ -62,7 +62,7 @@ async function GetCameraRoll(after: Date | number, before: Date | number, maxCou
             // createdAfter: after,
             // createdBefore: before,
             first: maxCount,
-            mediaType: ['photo']
+            mediaType: ['photo', 'video']
         });
     const entries: JournalEntry[] = [];
     for (const item of medias.assets) {

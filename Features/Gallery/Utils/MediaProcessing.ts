@@ -5,7 +5,6 @@ import * as FileSystem from 'expo-file-system';
 const DESIRED_HEIGHT = 400;
 
 export async function GenerateImageThumbnail(source: string, destination: string, originalWidth: number, originalHeight: number): Promise<void> {
-    console.log('Start process photo' + source);
     const thumbInfo = await FileSystem.getInfoAsync(destination, {size: false});
     if (thumbInfo.exists) {
         console.log(thumbInfo);
@@ -25,8 +24,11 @@ export async function GenerateImageThumbnail(source: string, destination: string
 }
 
 export async function GenerateVideoThumbnail(source: string, destination: string): Promise<void> {
-    console.log('Start process video' + source);
+    const thumbInfo = await FileSystem.getInfoAsync(destination, {size: false});
+    if (thumbInfo.exists) {
+        console.log(thumbInfo);
+        return;
+    }
     const thumbnail = await VideoThumbnails.getThumbnailAsync(source, {time: 1000, quality: 1});
     await GenerateImageThumbnail(thumbnail.uri, destination, thumbnail.width, thumbnail.height);
-    console.log('End process video' + source);
 }
