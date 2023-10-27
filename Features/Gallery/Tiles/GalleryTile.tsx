@@ -1,20 +1,20 @@
 import {DimensionValue, View} from "react-native";
-import {EntryKind, ImageEntry} from "../Types/Items";
+import {EntryKind, Grouped, ImageEntry, VideoEntry} from "../Types/Items";
 import {ImageTile} from "./ImageTile";
 import {VideoTile} from "./VideoTile";
 
 interface GalleryTileComponentProps {
-    item: ImageEntry,
-    width: DimensionValue
+    item: Grouped,
+    tileFlex: number
 }
 
-export function GalleryTile({item, width = '100%'}: GalleryTileComponentProps) {
+export function GalleryTile({item, tileFlex}: GalleryTileComponentProps) {
     return (
-        <View style={{flexDirection: 'row', width: width}}>
-            {item.kind === EntryKind.Image &&
+        <View style={{flex: tileFlex}}>
+            {item instanceof ImageEntry &&
             <ImageTile source={item.compressedPath}/>}
-            {item.kind === EntryKind.Video &&
-            <VideoTile source={item.fullQualityPath}/>}
+            {item instanceof VideoEntry &&
+            <ImageTile source={item.fullQualitySourcePath}/>}
         </View>
     );
 }

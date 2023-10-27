@@ -1,4 +1,4 @@
-import {OneRow, JournalRow, RowKind, ThreeRow, TwoRow} from "./Types/Rows";
+import {JournalRow, OneRow, RowKind, ThreeRow, TwoRow} from "./Types/Rows";
 import {View} from "react-native";
 import {OneRowComponent} from "./Rows/OneRowComponent";
 import {TwoRowComponent} from "./Rows/TwoRowComponent";
@@ -17,6 +17,8 @@ const rowSelector = (rowToRender: JournalRow)=>{
             return ThreeRowComponent({row: rowToRender as ThreeRow});
         case RowKind.Note:
             return ThreeRowComponent({row: rowToRender as ThreeRow});
+        case RowKind.Locality:
+
         default:
             throw new Error('Not implemented');
     }

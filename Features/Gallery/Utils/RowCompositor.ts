@@ -10,12 +10,8 @@ import {
 import {AudioRow, JournalRow, LocalityRow, MapRow, NoteRow, OneRow, ThreeRow, TwoRow} from "../Types/Rows";
 
 export function ComposeFromGround(entries: JournalEntry[]): JournalRow[] {
-    console.log('In compositor');
     const rows: JournalRow[] = [];
-    if (entries.length === 0) {
-        return rows;
-    }
-    const tmp_rows: JournalRow[] = [...rows];
+
     for (let i = 0; i < entries.length; i++) {
         let row: JournalRow | null = null;
         switch (entries[i].kind) {
@@ -23,18 +19,18 @@ export function ComposeFromGround(entries: JournalEntry[]): JournalRow[] {
             case EntryKind.Video:
             case EntryKind.POI:
                 const tmpEntries: Grouped[] = [];
-                for (let j = i; j < 3 && j < entries.length; j++) {
-                    if (!(entries[j] instanceof Grouped))
+                for (let j = 0; j < 3 && i + j < entries.length; j++) {
+                    if (!(entries[i+j] instanceof Grouped))
                         break;
-                    tmpEntries.push(entries[j] as Grouped);
+                    tmpEntries.push(entries[i+j] as Grouped);
                 }
                 switch (tmpEntries.length) {
-                    case 1:
-                        row = new OneRow([tmpEntries[0]]);
-                        break;
                     case 2:
                         row = new TwoRow(tmpEntries);
                         i += 1;
+                        break;
+                    case 1:
+                        row = new OneRow([tmpEntries[0]]);
                         break;
                     case 3:
                         row = new ThreeRow(tmpEntries);
@@ -55,8 +51,9 @@ export function ComposeFromGround(entries: JournalEntry[]): JournalRow[] {
                 row = new AudioRow(entries[i] as AudioEntry);
                 break;
         }
-        console.log('Generated row - ');
-        console.log(row);
+            rows.push(row as JournalRow);
+        // console.log('Generated row - ');
+        // console.log(row);
     }
     return rows;
 }

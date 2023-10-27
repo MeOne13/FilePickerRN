@@ -38,7 +38,6 @@ export async function GetJournalEntries(guid?: string): Promise<JournalEntry[]> 
         }
         entries.push(medias[i]);
     }
-    console.log(entries);
     return entries;
 }
 

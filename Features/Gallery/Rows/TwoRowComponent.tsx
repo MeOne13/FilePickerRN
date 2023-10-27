@@ -8,10 +8,11 @@ interface TwoRowComponentProps {
 }
 
 export function TwoRowComponent({row}: TwoRowComponentProps) {
+
     return (
         <View style={{flexDirection: 'row', height: row.rowHeight, flex: 1}}>
-            <GalleryTile item={row.Items[0]} width={'70%'}/>
-            <GalleryTile item={row.Items[0]} width={'30%'}/>
+            <GalleryTile item={row.entries[0]} />
+            <GalleryTile item={row.entries[1]} />
         </View>
     );
 }

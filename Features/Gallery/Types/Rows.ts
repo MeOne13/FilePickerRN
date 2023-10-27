@@ -62,6 +62,7 @@ export class OneRow extends JournalRow {
 
 export class TwoRow extends JournalRow {
     constructor(entries: Grouped[]) {
+        console.log(entries.length);
         if (entries.length < 2)
             throw new Error('Not enough entries in medias array');
         const portraitCount = entries.filter(e =>

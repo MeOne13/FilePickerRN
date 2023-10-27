@@ -9,7 +9,7 @@ export default function App() {
     // MapLibreGL.setAccessToken(null);
 
     const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
-    const [rows,setRows] = useState<JournalRow[]>([]);
+    const [rows, setRows] = useState<JournalRow[]>([]);
 
     const getJournal = async () => {
         console.log('int get');
@@ -20,13 +20,14 @@ export default function App() {
         //     mediaType: ['photo', 'video']
         // });
         // console.log(assets.assets.length);
-        try{
-    //    const journal = await GetTestJournal();
+        try {
+            const journal = await GetTestJournal();
+            setRows([...journal.rows]);
         }
-        catch (ex){
+        catch (ex) {
             console.log(ex);
         }
-       // setRows(journal.rows);
+        // setRows(journal.rows);
     }
     const clearRows = () => {
         setRows([]);
@@ -40,7 +41,8 @@ export default function App() {
             <Pressable style={styles.button} onPress={getJournal}>
                 <Text style={styles.text}>Picka</Text>
             </Pressable>
-            <Pressable style={styles.button} onPress={()=>getJournal().then((f)=> console.log('Finish in app')).catch((r)=>console.log('In catch app'))}>
+            <Pressable style={styles.button}
+                       onPress={() => getJournal().then((f) => console.log('Finish in app')).catch((r) => console.log('In catch app'))}>
                 <Text style={styles.text}>Picka</Text>
             </Pressable>
             {/*<MapLibreGL.MapView*/}
