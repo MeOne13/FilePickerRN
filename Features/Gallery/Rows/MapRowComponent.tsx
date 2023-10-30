@@ -10,17 +10,19 @@ interface MapRowComponentProps {
 export function MapRowComponent({row}: MapRowComponentProps) {
     MapLibreGL.setAccessToken(null);
     return (
-        <View style={{flexDirection: 'row', height: row.rowHeight, margin: 5, padding: 5}}>
+        <View style={{flexDirection: 'column', height: row.rowHeight, margin: 5, padding: 5}}>
             <MapLibreGL.MapView
                 style={styles.map}
                 logoEnabled={false}
             />
+            <Text style={{height: 100}}>Items</Text>
         </View>
     );
 }
 const styles = StyleSheet.create({
     map: {
         flex: 1,
+        height:300,
         alignSelf: 'stretch',
     },
 });

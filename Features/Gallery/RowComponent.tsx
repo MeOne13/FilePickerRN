@@ -1,4 +1,4 @@
-import {AudioRow, JournalRow, LocalityRow, MapRow, OneRow, RowKind, ThreeRow, TwoRow} from "./Types/Rows";
+import {AudioRow, JournalRow, LocalityRow, MapRow, NoteRow, OneRow, RowKind, ThreeRow, TwoRow} from "./Types/Rows";
 import {View} from "react-native";
 import {OneRowComponent} from "./Rows/OneRowComponent";
 import {TwoRowComponent} from "./Rows/TwoRowComponent";
@@ -6,6 +6,7 @@ import {ThreeRowComponent} from "./Rows/ThreeRowComponent";
 import {LocalityRowComponent} from "./Rows/LocalityRowComponent";
 import {MapRowComponent} from "./Rows/MapRowComponent";
 import {AudioRowComponent} from "./Rows/AudioRowComponent";
+import {NoteRowComponent} from "./Rows/NoteRowComponent";
 
 interface RowComponentProps {
     row: JournalRow
@@ -20,7 +21,7 @@ const rowSelector = (rowToRender: JournalRow) => {
         case RowKind.Three:
             return ThreeRowComponent({row: rowToRender as ThreeRow});
         case RowKind.Note:
-            return ThreeRowComponent({row: rowToRender as ThreeRow});
+            return NoteRowComponent({row: rowToRender as NoteRow});
         case RowKind.Locality:
             return LocalityRowComponent({row: rowToRender as LocalityRow});
         case RowKind.Map:

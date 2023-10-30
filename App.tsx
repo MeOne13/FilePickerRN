@@ -24,8 +24,7 @@ export default function App() {
             const journal = await GetTestJournal();
             setRows([...journal.rows]);
             console.log(journal.rows);
-        }
-        catch (ex) {
+        } catch (ex) {
             console.log(ex);
         }
         // setRows(journal.rows);
@@ -35,21 +34,13 @@ export default function App() {
         console.log('In clear');
     }
     return (
-        <View style={{height: 500}}>
-            <Pressable style={styles.button} onPress={getJournal}>
-                <Text style={styles.text}>Picka1</Text>
-            </Pressable>
-            <Pressable style={styles.button} onPress={getJournal}>
-                <Text style={styles.text}>Picka</Text>
-            </Pressable>
-            <Pressable style={styles.button}
-                       onPress={() => getJournal().then((f) => console.log('Finish in app')).catch((r) => console.log('In catch app'))}>
-                <Text style={styles.text}>Picka</Text>
-            </Pressable>
-            {/*<MapLibreGL.MapView*/}
-            {/*    style={styles.map}*/}
-            {/*    logoEnabled={false}*/}
-            {/*/>*/}
+        <View style={{flex: 1}}>
+            <View style={{height: 100}}>
+                <Pressable style={styles.button}
+                           onPress={() => getJournal().then((f) => console.log('Finish in app')).catch((r) => console.log('In catch app'))}>
+                    <Text style={styles.text}>Picka</Text>
+                </Pressable>
+            </View>
             <Pressable style={styles.button} onPress={() => clearRows()}>
                 <Text style={styles.text}>Clear</Text>
             </Pressable>
@@ -63,6 +54,7 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: 10,
         paddingVertical: 20,
         paddingHorizontal: 32,
         borderRadius: 4,

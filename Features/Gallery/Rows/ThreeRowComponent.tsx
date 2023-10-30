@@ -8,8 +8,6 @@ interface ThreeRowComponentProps {
 }
 
 export function ThreeRowComponent({row}: ThreeRowComponentProps) {
-    console.log(row.entries.length);
-
     const leftEntry = row.entries[0];
     const middleEntry = row.entries[1];
     const rightEntry = row.entries[2];

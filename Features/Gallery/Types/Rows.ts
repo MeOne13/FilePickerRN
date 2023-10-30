@@ -72,7 +72,7 @@ export class TwoRow extends JournalRow {
         let rowHeight = 0;
         switch (portraitCount) {
             case 2:
-                rowHeight = 300;
+                rowHeight = 250;
                 break;
             case 1:
                 rowHeight = 200;
@@ -93,21 +93,21 @@ export class ThreeRow extends JournalRow {
         if (entries.length < 3)
             throw new Error('Not enough items in medias array');
         let height = 0;
-        const portraitOrientationCount =entries.filter(e=>e.orientation === Orientation.Landscape).length;
-        switch (portraitOrientationCount){
+        const portraitOrientationCount = entries.filter(e => e.orientation === Orientation.Landscape).length;
+        switch (portraitOrientationCount) {
             case 0:
-                height=200;
+                height = 200;
                 break;
             case 1:
             case 2:
-                height=250;
+                height = 250;
                 break;
             case 3:
-                height=300;
+                height = 300;
                 break;
         }
         super(height, RowKind.Three);
-        this.entries = entries.slice(0, 3);
+        this.entries = entries.slice(0,3);
     }
 
     entries: Grouped[];

@@ -46,24 +46,27 @@ export interface Reacted {
 }
 
 export abstract class Grouped extends JournalEntry {
-    orientation: Orientation = Orientation.Portrait;
+    orientation: Orientation;
+
+    protected constructor(orientation: Orientation, guid: string | undefined, dateTaken: Date | number, dateOrder: Date | number) {
+        super(guid, dateTaken, dateOrder);
+        this.orientation = orientation;
+    }
 }
 
 export class ImageEntry extends Grouped {
     fullQualityPath: string;
     compressedPath: string;
-    orientation: Orientation;
 
     constructor(fullQualitySourcePath: string, compressedSourcePath: string,
                 orientation: Orientation = Orientation.Portrait,
                 guid: string | undefined,
                 dateTaken: Date | number,
                 dateOrder: Date | number) {
-        super(guid, dateTaken, dateOrder);
+        super(orientation,guid, dateTaken, dateOrder);
         this.fullQualityPath = fullQualitySourcePath;
         this.compressedPath = compressedSourcePath;
         this.kind = EntryKind.Image;
-        this.orientation = orientation;
     }
 }
 
@@ -71,7 +74,6 @@ export class VideoEntry extends Grouped {
     fullQualitySourcePath: string;
     compressedSourcePath: string | undefined;
     thumbnailPath: string;
-    orientation: Orientation;
 
     constructor(fullQualitySourcePath: string,
                 compressedSourcePath: string | undefined,
@@ -80,12 +82,21 @@ export class VideoEntry extends Grouped {
                 guid: string | undefined,
                 dateTaken: Date | number,
                 dateOrder: Date | number) {
-        super(guid, dateTaken, dateOrder);
+        super(orientation,guid, dateTaken, dateOrder);
         this.fullQualitySourcePath = fullQualitySourcePath;
         this.compressedSourcePath = compressedSourcePath;
         this.thumbnailPath = thumbnailPath;
         this.kind = EntryKind.Video;
-        this.orientation = orientation;
+    }
+}
+
+export class POIEntry extends Grouped {
+    title: string;
+
+    constructor(title: string, guid: string | undefined, dateTaken: Date | number, dateOrder: Date | number) {
+        super(Orientation.Portrait,guid, dateTaken, dateOrder);
+        this.title = title;
+        this.kind = EntryKind.POI;
     }
 }
 
@@ -99,24 +110,13 @@ export class AudioEntry extends JournalEntry {
     }
 }
 
-export class AchievementEntry extends JournalEntry {
+export class AchievementEntry extends Grouped {
     title: string;
 
     constructor(title: string, guid: string | undefined, dateTaken: Date | number, dateOrder: Date | number) {
-        super(guid, dateTaken, dateOrder);
+        super(Orientation.Portrait,guid, dateTaken, dateOrder);
         this.title = title;
         this.kind = EntryKind.Achievement;
-    }
-}
-
-export class POIEntry extends Grouped {
-    title: string;
-
-    constructor(title: string, guid: string | undefined, dateTaken: Date | number, dateOrder: Date | number) {
-        super(guid, dateTaken, dateOrder);
-        this.title = title;
-        this.kind = EntryKind.POI;
-        this.orientation = Orientation.Portrait;
     }
 }
 
