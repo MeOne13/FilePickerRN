@@ -23,7 +23,6 @@ export default function App() {
         try {
             const journal = await GetTestJournal();
             setRows([...journal.rows]);
-            console.log(journal.rows);
         } catch (ex) {
             console.log(ex);
         }

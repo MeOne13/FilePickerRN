@@ -11,9 +11,6 @@ export function POITile({title}: POITileComponentProps) {
     const u = useAssets(require( '../../../assets/images/poi.png'));
     const u1 = u[0];
     const u2 = u1 && u1[0].uri;
-    console.log(u1);
-    // console.log(u.uri);
-    // console.log(u.localUri);
     return (
         u2 && <View style={{flex:1}}>
             <Image

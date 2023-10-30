@@ -9,7 +9,7 @@ interface GalleryComponentProps {
 
 export function GalleryView({rows}: GalleryComponentProps) {
     return (
-        <View style={{height: 500}}>
+        <View style={{flex: 1}}>
             <FlashList
                 disableHorizontalListHeightMeasurement={true}
                 drawDistance={500}

@@ -15,7 +15,7 @@ export function GalleryTile({item, tileFlex}: GalleryTileComponentProps) {
             {item instanceof ImageEntry &&
                 <ImageTile source={item.compressedPath}/>}
             {item instanceof VideoEntry &&
-                <VideoTile source={item.fullQualitySourcePath}/>}
+                <VideoTile source={item.fullQualitySourcePath} thumbnailPath={item.thumbnailPath}/>}
             {item instanceof POIEntry &&
                 <POITile title={item.title}/>}
         </View>

@@ -5,20 +5,22 @@ import {ResizeMode, Video} from "expo-av";
 
 interface VideoTileComponentProps {
     source: string,
+    thumbnailPath: string
     // height: number,
     // width: number
 }
 
-export function VideoTile({source}: VideoTileComponentProps) {
+export function VideoTile({source, thumbnailPath}: VideoTileComponentProps) {
     return (
         <Video
-            style={{flex: 1, borderRadius: 15}}
+            style={{flex: 1, borderRadius: 5}}
             source={{uri: source}}
+            posterSource={{uri: thumbnailPath}}
             useNativeControls={true}
             resizeMode={ResizeMode.CONTAIN}
             isLooping={true}
             shouldPlay={false}
-            volume={0.5}
+            volume={1}
         />
     );
 }

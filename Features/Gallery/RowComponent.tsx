@@ -29,7 +29,7 @@ const rowSelector = (rowToRender: JournalRow) => {
         case RowKind.Audio:
             return AudioRowComponent({row: rowToRender as AudioRow});
         default:
-            throw new Error('Not implemented');
+            break;
     }
 }
 
