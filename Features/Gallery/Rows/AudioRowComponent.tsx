@@ -8,7 +8,7 @@ interface AudioRowComponentProps {
 
 export function AudioRowComponent({row}: AudioRowComponentProps) {
     return (
-        <View style={{flexDirection: 'row', height: row.rowHeight, margin: 5, padding: 5}}>
+        <View style={{flexDirection: 'row', height: row.rowHeight}}>
             <Text>/\/\/\/\/\/\/\/\/\/\/\/\</Text>
         </View>
     );

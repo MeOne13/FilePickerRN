@@ -1,10 +1,10 @@
 import {View} from "react-native";
-import {ThreeRow} from "../Types/Rows";
+import {ThreeRow, TwoOneRow} from "../Types/Rows";
 import {GalleryTile} from "../Tiles/GalleryTile";
 import {Orientation, VideoEntry} from "../Types/Items";
 
 interface TwoOneRowComponentProps {
-    row: ThreeRow
+    row: TwoOneRow
 }
 
 export function TwoOneRowComponent({row}: TwoOneRowComponentProps) {
@@ -16,7 +16,7 @@ export function TwoOneRowComponent({row}: TwoOneRowComponentProps) {
     const smallColumnFlex = 6 - bigTileFlex;
 
     return (
-        <View style={{flexDirection: 'row', height: row.rowHeight, margin: 5, padding: 5}}>
+        <View style={{flexDirection: 'row', height: row.rowHeight}}>
             <View style={{flex: smallColumnFlex, flexDirection: 'column'}}>
                 <GalleryTile item={tSmall} tileFlex={1}/>
                 <GalleryTile item={bSmall} tileFlex={1}/>

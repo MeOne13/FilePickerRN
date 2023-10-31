@@ -9,13 +9,13 @@ import Style = MapLibreGL.Style;
 interface GalleryTileComponentProps {
     item: Grouped,
     tileFlex: number,
-    paddingLeft: number,
-    paddingRight: number
+    // paddingLeft: number,
+    // paddingRight: number
 }
 
-export function GalleryTile({item, tileFlex, paddingRight, paddingLeft}: GalleryTileComponentProps) {
+export function GalleryTile({item, tileFlex}: GalleryTileComponentProps) {
     return (
-        <View style={{flex: tileFlex, paddingLeft: paddingLeft, paddingRight: paddingRight}}>
+        <View style={{flex: tileFlex, padding: 3}}>
             {item instanceof ImageEntry &&
                 <ImageTile source={item.compressedPath}/>}
             {item instanceof VideoEntry &&

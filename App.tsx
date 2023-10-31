@@ -4,14 +4,14 @@ import {GalleryView} from "./Features/Gallery/GalleryView";
 import {JournalRow} from "./Features/Gallery/Types/Rows";
 import {GetTestJournal} from "./Features/Gallery/Utils/TestJournalCompositor";
 import * as MediaLibrary from "expo-media-library";
-import * as SystemUI from 'expo-system-ui';
+// import * as SystemUI from 'expo-system-ui';
 
 export default function App() {
     // MapLibreGL.setAccessToken(null);
 
     const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
     const [rows, setRows] = useState<JournalRow[]>([]);
-    SystemUI.setBackgroundColorAsync("black");
+    // SystemUI.setBackgroundColorAsync("black");
 
     const getJournal = async () => {
         console.log('int get');
@@ -36,12 +36,10 @@ export default function App() {
     }
     return (
         <View style={styles.container}>
-            <View style={{height: 150}}>
-                <Pressable style={styles.button}
-                           onPress={() => getJournal().then((f) => console.log('Finish in app')).catch((r) => console.log('In catch app'))}>
-                    <Text style={styles.text}>Picka</Text>
-                </Pressable>
-            </View>
+            <Pressable style={styles.button}
+                       onPress={() => getJournal().then((f) => console.log('Finish in app')).catch((r) => console.log('In catch app'))}>
+                <Text style={styles.text}>Picka</Text>
+            </Pressable>
             <Pressable style={styles.button} onPress={() => clearRows()}>
                 <Text style={styles.text}>Clear</Text>
             </Pressable>
@@ -54,14 +52,16 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#25292e',
+        gap: 6,
+        paddingTop: 50,
         alignItems: 'stretch',
-        justifyContent: 'center'
+        backgroundColor: "#232323"
     },
     button: {
         alignItems: 'center',
-        justifyContent: 'center',
         paddingTop: 10,
+        paddingLeft: 10,
+        paddingBottom: 10,
         paddingVertical: 20,
         paddingHorizontal: 32,
         borderRadius: 4,
@@ -74,9 +74,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing: 0.25,
         color: 'white',
-    },
-    map: {
-        flex: 1,
-        alignSelf: 'stretch',
-    },
+    }
 });

@@ -7,7 +7,7 @@ import {
     OneRow,
     OneTwoRow,
     RowKind,
-    ThreeRow,
+    ThreeRow, TwoOneRow,
     TwoRow
 } from "./Types/Rows";
 import {View} from "react-native";
@@ -19,6 +19,7 @@ import {MapRowComponent} from "./Rows/MapRowComponent";
 import {AudioRowComponent} from "./Rows/AudioRowComponent";
 import {NoteRowComponent} from "./Rows/NoteRowComponent";
 import {OneTwoRowComponent} from "./Rows/OneTwoRowComponent";
+import {TwoOneRowComponent} from "./Rows/TwoOneRowComponent";
 
 interface RowComponentProps {
     row: JournalRow
@@ -32,6 +33,8 @@ const rowSelector = (rowToRender: JournalRow) => {
             return TwoRowComponent({row: rowToRender as TwoRow});
         case RowKind.Three:
             return ThreeRowComponent({row: rowToRender as ThreeRow});
+        case RowKind.TwoOne:
+            return TwoOneRowComponent({row: rowToRender as TwoOneRow});
         case RowKind.OneTwo:
             return OneTwoRowComponent({row: rowToRender as OneTwoRow});
         case RowKind.Note:
@@ -49,7 +52,7 @@ const rowSelector = (rowToRender: JournalRow) => {
 
 export function RowComponent({row}: RowComponentProps) {
     return (
-        <View style={{height: row.rowHeight, paddingBottom: 5}}>
+        <View style={{height: row.rowHeight}}>
             {rowSelector(row)}
         </View>
     );

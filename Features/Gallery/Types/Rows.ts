@@ -64,7 +64,7 @@ export class OneRow extends JournalRow {
         if (entries.length < 1)
             throw new Error('Not enough entries in medias array');
 
-        super(entries[0].orientation === Orientation.Portrait ? 400 : 300, RowKind.One);
+        super(entries[0].orientation === Orientation.Portrait ? 500 : 400, RowKind.One);
         this.entry = entries[0];
     }
 
@@ -91,14 +91,14 @@ export class TwoRow extends JournalRow {
                         rowHeight = 300;
                         break;
                     case 2:
-                        rowHeight = 150;
+                        rowHeight = 200;
                         break;
                 }
                 break;
             case 1:
                 switch (landscapeCount) {
                     case 2:
-                        rowHeight = 150;
+                        rowHeight = 200;
                         break;
                     case 1:
                         rowHeight = 300;
@@ -114,10 +114,10 @@ export class TwoRow extends JournalRow {
                         rowHeight = 300;
                         break;
                     case 1:
-                        rowHeight = 200;
+                        rowHeight = 250;
                         break;
                     case 2:
-                        rowHeight = 150;
+                        rowHeight = 200;
                         break;
                 }
                 break;
@@ -158,7 +158,8 @@ export class OneTwoRow extends JournalRow {
     constructor(entries: Grouped[]) {
         if (entries.length < 3)
             throw new Error('Not enough items in medias array');
-        let rowHeight = entries[0].kind === EntryKind.Video ? 400 : 300;
+        let rowHeight = 400;
+        // let rowHeight = entries[0].kind === EntryKind.Video ? 400 : 300;
         super(rowHeight, RowKind.OneTwo);
         this.entries = entries;
     }
@@ -170,7 +171,8 @@ export class TwoOneRow extends JournalRow {
     constructor(entries: Grouped[]) {
         if (entries.length < 3)
             throw new Error('Not enough items in medias array');
-        let rowHeight = entries[2].kind === EntryKind.Video ? 400 : 300;
+        let rowHeight = 400;
+        // let rowHeight = entries[2].kind === EntryKind.Video ? 400 : 300;
         super(rowHeight, RowKind.TwoOne);
         this.entries = entries;
     }

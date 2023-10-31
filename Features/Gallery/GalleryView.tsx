@@ -11,6 +11,7 @@ export function GalleryView({rows}: GalleryComponentProps) {
     return (
         <View style={{flex: 1}}>
             <FlashList
+                contentContainerStyle={{padding: 3}}
                 disableHorizontalListHeightMeasurement={true}
                 drawDistance={500}
                 estimatedItemSize={300}

@@ -8,7 +8,7 @@ interface LocalityRowComponentProps {
 
 export function LocalityRowComponent({row}: LocalityRowComponentProps) {
     return (
-        <View style={{flexDirection: 'row', height: row.rowHeight, margin: 5, padding: 5}}>
+        <View style={{flexDirection: 'row', height: row.rowHeight}}>
             <Text>wqeqweqew{row.locality.title}</Text>
         </View>
     );
