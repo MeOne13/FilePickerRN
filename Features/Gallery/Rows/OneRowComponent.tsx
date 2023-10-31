@@ -9,7 +9,7 @@ interface OneRowComponentProps {
 export function OneRowComponent({row}: OneRowComponentProps) {
     return (
         <View style={{flex: 1}}>
-            <GalleryTile item={row.entry} tileFlex={1}/>
+            <GalleryTile item={row.entry} tileFlex={1} paddingLeft={6} paddingRight={6}/>
         </View>
     );
 }

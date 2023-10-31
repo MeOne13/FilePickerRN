@@ -41,7 +41,7 @@ export async function GetJournalEntries(guid?: string): Promise<JournalEntry[]> 
     return entries;
 }
 
-async function GetCameraRoll(after: Date | number, before: Date | number, maxCount: number = 30) {
+async function GetCameraRoll(after: Date | number, before: Date | number, maxCount: number = 100) {
     console.log('in camera');
 
     const thumbsDirectory = FileSystem.documentDirectory + '0-500/';

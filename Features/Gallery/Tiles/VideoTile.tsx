@@ -17,7 +17,7 @@ export function VideoTile({source, thumbnailPath}: VideoTileComponentProps) {
             source={{uri: source}}
             posterSource={{uri: thumbnailPath}}
             useNativeControls={true}
-            resizeMode={ResizeMode.CONTAIN}
+            resizeMode={ResizeMode.COVER}
             isLooping={true}
             shouldPlay={false}
             volume={1}

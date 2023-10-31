@@ -4,12 +4,14 @@ import {GalleryView} from "./Features/Gallery/GalleryView";
 import {JournalRow} from "./Features/Gallery/Types/Rows";
 import {GetTestJournal} from "./Features/Gallery/Utils/TestJournalCompositor";
 import * as MediaLibrary from "expo-media-library";
+import * as SystemUI from 'expo-system-ui';
 
 export default function App() {
     // MapLibreGL.setAccessToken(null);
 
     const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
     const [rows, setRows] = useState<JournalRow[]>([]);
+    SystemUI.setBackgroundColorAsync("black");
 
     const getJournal = async () => {
         console.log('int get');
@@ -33,8 +35,8 @@ export default function App() {
         console.log('In clear');
     }
     return (
-        <View style={{flex: 1}}>
-            <View style={{height: 100}}>
+        <View style={styles.container}>
+            <View style={{height: 150}}>
                 <Pressable style={styles.button}
                            onPress={() => getJournal().then((f) => console.log('Finish in app')).catch((r) => console.log('In catch app'))}>
                     <Text style={styles.text}>Picka</Text>
@@ -50,6 +52,12 @@ export default function App() {
     );
 }
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#25292e',
+        alignItems: 'stretch',
+        justifyContent: 'center'
+    },
     button: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -58,7 +66,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: 'black',
+        backgroundColor: 'grey',
     },
     text: {
         fontSize: 16,

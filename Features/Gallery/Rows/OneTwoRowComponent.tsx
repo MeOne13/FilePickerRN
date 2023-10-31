@@ -12,14 +12,18 @@ export function OneTwoRowComponent({row}: OneTwoRowComponentProps) {
     const tSmall = row.entries[1];
     const bSmall = row.entries[2];
 
-    const leftTileFlex = big instanceof VideoEntry ? ;
-    const middleTileFlex = middleEntry.orientation === Orientation.Landscape ? 5 : 3;
-    const rightTileFlex = rightEntry.orientation === Orientation.Landscape ? 5 : 3;
+    const bigTileFlex = big instanceof VideoEntry ? 3 : 4;
+    const smallColumnFlex = 6 - bigTileFlex;
+
     return (
-        <View style={{flexDirection: 'row', height: row.rowHeight, margin: 5, padding: 5}}>
-            <GalleryTile item={row.entries[0]} tileFlex={leftTileFlex}/>
-            <GalleryTile item={row.entries[1]} tileFlex={middleTileFlex}/>
-            <GalleryTile item={row.entries[2]} tileFlex={rightTileFlex}/>
+        <View style={{flexDirection: 'row', height: row.rowHeight}}>
+            <View style={{flex: bigTileFlex}}>
+                <GalleryTile item={big} tileFlex={1} paddingLeft={6} paddingRight={0}/>
+            </View>
+            <View style={{flex: smallColumnFlex, flexDirection: 'column'}}>
+                <GalleryTile item={tSmall} tileFlex={1} paddingLeft={6} paddingRight={6}/>
+                <GalleryTile item={bSmall} tileFlex={1} paddingLeft={6} paddingRight={6}/>
+            </View>
         </View>
     );
 }

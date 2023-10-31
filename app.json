@@ -6,11 +6,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -23,6 +23,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "userInterfaceStyle": "dark",
       "package": "com.anonymous.RNTX"
     },
     "web": {
@@ -32,7 +33,6 @@
       "@maplibre/maplibre-react-native"
     ],
     "sdkVersion": "49.0.0"
-    // "entryPoint": ".vscode/exponentIndex.js"
   },
   "name": "rntx"
 }

@@ -1,4 +1,15 @@
-import {AudioEntry, EntryKind, Grouped, LocalityEntry, MapEntry, NoteEntry, Orientation} from "./Items";
+import {
+    AchievementEntry,
+    AudioEntry,
+    EntryKind,
+    Grouped,
+    LocalityEntry,
+    MapEntry,
+    NoteEntry,
+    Orientation,
+    POIEntry,
+    VideoEntry
+} from "./Items";
 
 export abstract class JournalRow {
     protected constructor(rowHeight: number = 300, kind: RowKind = RowKind.Two) {
@@ -61,24 +72,54 @@ export class OneRow extends JournalRow {
 }
 
 export class TwoRow extends JournalRow {
-    constructor(entries: Grouped[]) {
-        if (entries.length < 2)
+    constructor(items: Grouped[]) {
+        if (items.length < 2)
             throw new Error('Not enough entries in medias array');
-        const portraitCount = entries.filter(e =>
-            e.kind === EntryKind.POI
-            || e.kind === EntryKind.Achievement
-            || ((e.kind === EntryKind.Image || e.kind === EntryKind.Video) && (e as Grouped).orientation === Orientation.Portrait))
-            .length;
-        let rowHeight = 0;
-        switch (portraitCount) {
+        const entries = items.slice(0, 2);
+        const landscapeCount = entries.filter(e => e.orientation === Orientation.Landscape).length;
+        const videosCount = entries.filter(e => e instanceof VideoEntry).length;
+        const poisCount = entries.filter(e => e instanceof POIEntry || e instanceof AchievementEntry).length;
+        let rowHeight = 50;
+
+        switch (videosCount) {
             case 2:
-                rowHeight = 250;
+                switch (landscapeCount) {
+                    case 0:
+                        rowHeight = 400;
+                        break;
+                    case 1:
+                        rowHeight = 300;
+                        break;
+                    case 2:
+                        rowHeight = 150;
+                        break;
+                }
                 break;
             case 1:
-                rowHeight = 200;
+                switch (landscapeCount) {
+                    case 2:
+                        rowHeight = 150;
+                        break;
+                    case 1:
+                        rowHeight = 300;
+                        break;
+                    case 0:
+                        rowHeight = 400;
+                        break;
+                }
                 break;
-            default:
-                rowHeight = 150;
+            case 0:
+                switch (landscapeCount) {
+                    case 0:
+                        rowHeight = 300;
+                        break;
+                    case 1:
+                        rowHeight = 200;
+                        break;
+                    case 2:
+                        rowHeight = 150;
+                        break;
+                }
                 break;
         }
         super(rowHeight, RowKind.Two);
@@ -103,11 +144,11 @@ export class ThreeRow extends JournalRow {
                 height = 250;
                 break;
             case 3:
-                height = 300;
+                height = 250;
                 break;
         }
         super(height, RowKind.Three);
-        this.entries = entries.slice(0,3);
+        this.entries = entries.slice(0, 3);
     }
 
     entries: Grouped[];
@@ -117,38 +158,24 @@ export class OneTwoRow extends JournalRow {
     constructor(entries: Grouped[]) {
         if (entries.length < 3)
             throw new Error('Not enough items in medias array');
-        let rowHeight = 300;
-        if (entries[0].kind === EntryKind.Video || entries[0].orientation === Orientation.Portrait) {
-            rowHeight = 400;
-        }
+        let rowHeight = entries[0].kind === EntryKind.Video ? 400 : 300;
         super(rowHeight, RowKind.OneTwo);
-        this.big = entries[0];
-        this.topSmall = entries[1];
-        this.bottomSmall = entries[2];
+        this.entries = entries;
     }
 
-    big: Grouped;
-    topSmall: Grouped;
-    bottomSmall: Grouped;
+    entries: Grouped[];
 }
 
 export class TwoOneRow extends JournalRow {
     constructor(entries: Grouped[]) {
         if (entries.length < 3)
             throw new Error('Not enough items in medias array');
-        let rowHeight = 300;
-        if (entries[2].kind === EntryKind.Video || entries[2].orientation === Orientation.Portrait) {
-            rowHeight = 400;
-        }
+        let rowHeight = entries[2].kind === EntryKind.Video ? 400 : 300;
         super(rowHeight, RowKind.TwoOne);
-        this.big = entries[2];
-        this.topSmall = entries[1];
-        this.bottomSmall = entries[0];
+        this.entries = entries;
     }
 
-    big: Grouped;
-    topSmall: Grouped;
-    bottomSmall: Grouped;
+    entries: Grouped[];
 }
 
 export class MapRow extends JournalRow {

@@ -25,7 +25,7 @@ import {
     TwoRow
 } from "../Types/Rows";
 
-const d: number[] = [0,0,0,0,0];
+const d: number[] = [0, 0, 0, 0, 0];
 // for (let i = 0; i < 5; i++) {
 //     d.push(0);
 // }
@@ -102,7 +102,6 @@ function calculateRowDistances(row: JournalRow) {
 function composeMediaRow(entries: Grouped[]): [JournalRow, number] {
     let journalRow: JournalRow;
     let delta = 1;
-    console.log(entries.length)
     switch (entries.length) {
         case 1:
             journalRow = new OneRow(entries);
@@ -139,11 +138,14 @@ function chooseRowForThreeMedias(entries: Grouped[]): [JournalRow, number] {
             return [row, 2];
         }
     }
+
     if (videosPosition.some(e => e)) {
-        if (videosPosition[0] && !videosPosition[1] && !videosPosition[2]) {
+        if (videosPosition[0] && entries[0].orientation === Orientation.Portrait
+            && !videosPosition[1] && !videosPosition[2]) {
             const row = new OneTwoRow(entries);
             return [row, 3];
-        } else if (!videosPosition[0] && !videosPosition[1] && videosPosition[2]) {
+        } else if (!videosPosition[0] && !videosPosition[1]
+            && videosPosition[2] && entries[2].orientation === Orientation.Portrait) {
             const row = new TwoOneRow(entries);
             return [row, 3];
         }
@@ -171,27 +173,31 @@ function chooseRowForThreeMedias(entries: Grouped[]): [JournalRow, number] {
     }
 
     function getMostSuitable(): RowKind {
-        if (!isLandscape && d[RowKind.Three] >= 2) {
-            return RowKind.Three;
-        }
-        console.log(d)
-        let maxPos = 0;
-        let max = 0;
-        let prevMaxPos = 0;
-        let prevMax = 0;
-        for (let i = 0; i < d.length; i++) {
-            if (d[i] >= prevMax) {
-                prevMax = max;
-                prevMaxPos = maxPos;
-                maxPos = i;
-                max = d[i];
-            }
-        }
-        console.log(maxPos);
-        if (maxPos == RowKind.Three && isLandscape) {
-            return prevMaxPos;
+        if (isLandscape) {
+            const one = d[RowKind.One];
+            const two = d[RowKind.Two];
+            return one > two ? RowKind.One : RowKind.Two;
         } else {
-            return maxPos;
+            if (d[RowKind.Three] > 2) {
+                return RowKind.Three;
+            }
+            let maxPos = 0;
+            let max = 0;
+            let prevMaxPos = 0;
+            let prevMax = 0;
+            for (let i = 0; i < d.length; i++) {
+                if (d[i] >= prevMax) {
+                    prevMax = max;
+                    prevMaxPos = maxPos;
+                    maxPos = i;
+                    max = d[i];
+                }
+            }
+            if (maxPos == RowKind.Three && isLandscape) {
+                return prevMaxPos;
+            } else {
+                return maxPos;
+            }
         }
     }
 }

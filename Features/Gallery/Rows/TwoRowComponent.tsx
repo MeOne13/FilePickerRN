@@ -28,8 +28,8 @@ export function TwoRowComponent({row}: TwoRowComponentProps) {
 
     return (
         <View style={{flexDirection: 'row', height: row.rowHeight, flex: 1}}>
-            <GalleryTile item={leftEntry} tileFlex={leftTileFlex}/>
-            <GalleryTile item={rightEntry} tileFlex={rightTileFlex}/>
+            <GalleryTile item={leftEntry} tileFlex={leftTileFlex} paddingLeft={6} paddingRight={3}/>
+            <GalleryTile item={rightEntry} tileFlex={rightTileFlex} paddingLeft={3} paddingRight={6}/>
         </View>
     );
 }
