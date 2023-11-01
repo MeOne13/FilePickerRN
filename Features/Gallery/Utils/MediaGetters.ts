@@ -18,21 +18,24 @@ export async function GetJournalEntries(guid?: string): Promise<JournalEntry[]> 
 
     const entries: JournalEntry[] = [];
     for (let i = 0; i < medias.length; i++) {
-        if (i % 15 === 0) {
-            const mapEntry = new MapEntry([], undefined, 0, 0);
-            const locality = new LocalityEntry('Some city', TransportType.Vehicle, undefined, 0, 0);
-            entries.push(mapEntry);
-            entries.push(locality);
-        } else if (i % 10 === 0) {
-            const quantity = Math.floor(Math.random() * (3 - 1 + 1) + 1);
-            for (let j = 0; j < quantity; j++) {
-                const poi = new POIEntry('OLOLO', undefined, 0, 0);
-                entries.push(poi);
-            }
-        } else if (i % 7 === 0 && Boolean(Math.round(Math.random()))) {
+        // if (i % 15 === 0) {
+        //     const mapEntry = new MapEntry([], undefined, 0, 0);
+        //     const locality = new LocalityEntry('Some city', TransportType.Vehicle, undefined, 0, 0);
+        //     entries.push(mapEntry);
+        //     entries.push(locality);
+        // }
+            // else if (i % 10 === 0) {
+            //     const quantity = Math.floor(Math.random() * (3 - 1 + 1) + 1);
+            //     for (let j = 0; j < quantity; j++) {
+            //         const poi = new POIEntry('OLOLO', undefined, 0, 0);
+            //         entries.push(poi);
+            //     }
+        // }
+        // else
+            if (i % 7 === 0 && Boolean(Math.round(Math.random()))) {
             const noteEntry = new NoteEntry(undefined, undefined, 0, 0);
             entries.push(noteEntry);
-        } else if (i % 20 === 0) {
+        } else if (i % 11 === 0) {
             const audioEntry = new AudioEntry(undefined, undefined, 0, 0);
             entries.push(audioEntry);
         }
@@ -46,13 +49,12 @@ async function GetCameraRoll(after: Date | number, before: Date | number, maxCou
 
     const thumbsDirectory = FileSystem.documentDirectory + '0-500/';
     // const thumbsDirectory = FileSystem.cacheDirectory + 'journals/' + 'test/' + 'thumbs/' + '0-500';
-    try{
-    const dirInfo = await FileSystem.getInfoAsync(thumbsDirectory);
-    console.log(dirInfo);
-    if (!dirInfo.exists)
-        await FileSystem.makeDirectoryAsync(thumbsDirectory);
-    }
-    catch (ex){
+    try {
+        const dirInfo = await FileSystem.getInfoAsync(thumbsDirectory);
+        console.log(dirInfo);
+        if (!dirInfo.exists)
+            await FileSystem.makeDirectoryAsync(thumbsDirectory);
+    } catch (ex) {
         console.log(ex);
     }
     console.log('after');

@@ -36,7 +36,7 @@ export class LocalityRow extends JournalRow {
     locality: LocalityEntry;
 
     constructor(locality: LocalityEntry) {
-        super(100, RowKind.Locality);
+        super(70, RowKind.Locality);
         this.locality = locality;
     }
 }
@@ -54,7 +54,7 @@ export class AudioRow extends JournalRow {
     audio: AudioEntry;
 
     constructor(audio: AudioEntry) {
-        super(100, RowKind.Audio);
+        super(170, RowKind.Audio);
         this.audio = audio;
     }
 }

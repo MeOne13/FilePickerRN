@@ -1,6 +1,7 @@
 import {AudioRow} from "../Types/Rows";
 import {Text, View} from "react-native";
 import React from "react";
+import {AudioTile} from "../Tiles/AudioTile";
 
 interface AudioRowComponentProps {
     row: AudioRow
@@ -8,8 +9,8 @@ interface AudioRowComponentProps {
 
 export function AudioRowComponent({row}: AudioRowComponentProps) {
     return (
-        <View style={{flexDirection: 'row', height: row.rowHeight}}>
-            <Text>/\/\/\/\/\/\/\/\/\/\/\/\</Text>
+        <View style={{height: row.rowHeight, flex: 1}}>
+            <AudioTile audio={row.audio}/>
         </View>
     );
 }
