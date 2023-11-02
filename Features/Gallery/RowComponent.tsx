@@ -7,7 +7,8 @@ import {
     OneRow,
     OneTwoRow,
     RowKind,
-    ThreeRow, TwoOneRow,
+    ThreeRow,
+    TwoOneRow,
     TwoRow
 } from "./Types/Rows";
 import {View} from "react-native";
@@ -16,7 +17,6 @@ import {TwoRowComponent} from "./Rows/TwoRowComponent";
 import {ThreeRowComponent} from "./Rows/ThreeRowComponent";
 import {LocalityRowComponent} from "./Rows/LocalityRowComponent";
 import {MapRowComponent} from "./Rows/MapRowComponent";
-import {AudioRowComponent} from "./Rows/AudioRowComponent";
 import {NoteRowComponent} from "./Rows/NoteRowComponent";
 import {OneTwoRowComponent} from "./Rows/OneTwoRowComponent";
 import {TwoOneRowComponent} from "./Rows/TwoOneRowComponent";
@@ -38,13 +38,12 @@ const rowSelector = (rowToRender: JournalRow) => {
         case RowKind.OneTwo:
             return OneTwoRowComponent({row: rowToRender as OneTwoRow});
         case RowKind.Note:
-            return NoteRowComponent({row: rowToRender as NoteRow});
+        case RowKind.Audio:
+            return NoteRowComponent({row: rowToRender.kind === RowKind.Note ? rowToRender as NoteRow : rowToRender as AudioRow});
         case RowKind.Locality:
             return LocalityRowComponent({row: rowToRender as LocalityRow});
         case RowKind.Map:
             return MapRowComponent({row: rowToRender as MapRow});
-        case RowKind.Audio:
-            return AudioRowComponent({row: rowToRender as AudioRow});
         default:
             break;
     }
@@ -52,7 +51,7 @@ const rowSelector = (rowToRender: JournalRow) => {
 
 export function RowComponent({row}: RowComponentProps) {
     return (
-        <View style={{height: row.rowHeight}}>
+        <View style={{height: row.rowHeight, borderRadius: 5}}>
             {rowSelector(row)}
         </View>
     );

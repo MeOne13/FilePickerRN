@@ -1,58 +1,69 @@
-import {useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {useEffect, useState} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
 import {GalleryView} from "./Features/Gallery/GalleryView";
-import {JournalRow} from "./Features/Gallery/Types/Rows";
-import {GetTestJournal} from "./Features/Gallery/Utils/TestJournalCompositor";
-import * as MediaLibrary from "expo-media-library";
-import {useFonts} from "expo-font";
-// import * as SystemUI from 'expo-system-ui';
+import * as Location from 'expo-location';
+import {LocationObject} from "expo-location";
+import * as TaskManager from 'expo-task-manager';
+
+const LOCATION_TASK_NAME = 'background-location-task';
 
 export default function App() {
-    const [fontsLoaded] = useFonts({
-        'Inter-Black': require('./assets/fonts/Roboto-Black.ttf'),
-    });
-    // MapLibreGL.setAccessToken(null);
 
-    // const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
-    // const [rows, setRows] = useState<JournalRow[]>([]);
-    // SystemUI.setBackgroundColorAsync("black");
+    const [location, setLocation] = useState<LocationObject>();
+    const [errorMsg, setErrorMsg] = useState('');
+    useEffect(() => {
+        (async () => {
 
-    // const getJournal = async () => {
-    //     console.log('int get');
-    //     // const assets = await MediaLibrary.getAssetsAsync({
-    //     //     // createdAfter: after,
-    //     //     // createdBefore: before,
-    //     //     first: 100,
-    //     //     mediaType: ['photo', 'video']
-    //     // });
-    //     // console.log(assets.assets.length);
-    //     try {
-    //         const journal = await GetTestJournal();
-    //         setRows([...journal.rows]);
-    //     } catch (ex) {
-    //         console.log(ex);
-    //     }
-    //     // setRows(journal.rows);
-    // }
-    // const clearRows = () => {
-    //     setRows([]);
-    //     console.log('In clear');
-    // }
+            let {status} = await Location.requestForegroundPermissionsAsync();
+            const { status: backgroundStatus } = await Location.requestBackgroundPermissionsAsync();
+
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+            await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+                accuracy: Location.Accuracy.Balanced,
+                timeInterval: 30000,
+                distanceInterval: 150
+            });
+
+            let location = await Location.getCurrentPositionAsync({});
+            setLocation(location);
+        })();
+    }, []);
+
+    let text = 'Waiting..';
+    if (errorMsg) {
+        text = errorMsg;
+    } else if (location) {
+        text = JSON.stringify(location);
+    }
     return (
-        <View style={{flex:1}}>
-            {/*<Pressable style={styles.button}*/}
-            {/*           onPress={() => getJournal().then((f) => console.log('Finish in app')).catch((r) => console.log('In catch app'))}>*/}
-            {/*    <Text style={styles.text}>Picka</Text>*/}
-            {/*</Pressable>*/}
-            {/*<Pressable style={styles.button} onPress={() => clearRows()}>*/}
-            {/*    <Text style={styles.text}>Clear</Text>*/}
-            {/*</Pressable>*/}
-            {/*{rows?.length > 0 &&*/}
+        <View style={{flex: 1}}>
             {GalleryView()}
-            {/*}*/}
+            <Text>{text}</Text>
         </View>
     );
 }
+
+TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+    if (error) {
+        console.log(error);
+        // Error occurred - check `error.message` for more details.
+        return;
+    }
+    if (data) {
+        console.log(data);
+        const { locations } = data;
+        let lat = locations[0].coords.latitude;
+        let long = locations[0].coords.longitude;
+
+        console.log(
+            `${new Date(Date.now()).toLocaleString()}: ${lat},${long}`
+        );
+        // do something with the locations captured in the background
+    }
+});
 const styles = StyleSheet.create({
     container: {
         flex: 1,

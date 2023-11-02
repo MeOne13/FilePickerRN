@@ -45,7 +45,7 @@ export class NoteRow extends JournalRow {
     note: NoteEntry;
 
     constructor(note: NoteEntry) {
-        super(note.text.length > 300 ? 300 : 200, RowKind.Note);
+        super(note.text.length > 119 ? 300 : 150, RowKind.Note);
         this.note = note;
     }
 }
@@ -54,7 +54,7 @@ export class AudioRow extends JournalRow {
     audio: AudioEntry;
 
     constructor(audio: AudioEntry) {
-        super(170, RowKind.Audio);
+        super(140, RowKind.Audio);
         this.audio = audio;
     }
 }
@@ -64,7 +64,7 @@ export class OneRow extends JournalRow {
         if (entries.length < 1)
             throw new Error('Not enough entries in medias array');
 
-        super(entries[0].orientation === Orientation.Portrait ? 500 : 400, RowKind.One);
+        super(entries[0].orientation === Orientation.Portrait ? 500 : 300, RowKind.One);
         this.entry = entries[0];
     }
 
@@ -78,7 +78,6 @@ export class TwoRow extends JournalRow {
         const entries = items.slice(0, 2);
         const landscapeCount = entries.filter(e => e.orientation === Orientation.Landscape).length;
         const videosCount = entries.filter(e => e instanceof VideoEntry).length;
-        const poisCount = entries.filter(e => e instanceof POIEntry || e instanceof AchievementEntry).length;
         let rowHeight = 50;
 
         switch (videosCount) {

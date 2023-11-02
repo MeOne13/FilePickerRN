@@ -10,7 +10,7 @@ interface AudioTileComponentProps {
 }
 
 export function AudioTile({audio}: AudioTileComponentProps) {
-    const u = useAssets(require('../../../assets/images/audio.png'));
+    const u = useAssets(require('../../../assets/images/audio.svg'));
     const u1 = u[0];
     const u2 = u1 && u1[0].uri;
     return (

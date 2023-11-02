@@ -37,7 +37,7 @@ export function GalleryView() {
         console.log('In clear');
     }
     return (
-        <View style={{flex: 1, backgroundColor: 'black'}}>
+        <View style={{flex: 1, backgroundColor: 'black', paddingTop: 3}}>
             <FlashList
                 ListHeaderComponent={
                     <View style={{flex: 1, paddingTop:50}}>
@@ -50,7 +50,6 @@ export function GalleryView() {
                         </Pressable>
                     </View>
                 }
-                contentContainerStyle={{padding: 3}}
                 disableHorizontalListHeightMeasurement={true}
                 drawDistance={500}
                 estimatedItemSize={300}

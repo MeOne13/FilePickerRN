@@ -51,7 +51,6 @@ async function GetCameraRoll(after: Date | number, before: Date | number, maxCou
     // const thumbsDirectory = FileSystem.cacheDirectory + 'journals/' + 'test/' + 'thumbs/' + '0-500';
     try {
         const dirInfo = await FileSystem.getInfoAsync(thumbsDirectory);
-        console.log(dirInfo);
         if (!dirInfo.exists)
             await FileSystem.makeDirectoryAsync(thumbsDirectory);
     } catch (ex) {

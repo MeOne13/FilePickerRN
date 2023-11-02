@@ -125,10 +125,11 @@ export class NoteEntry extends JournalEntry {
 
     constructor(text: string | undefined, guid: string | undefined, dateTaken: Date | number, dateOrder: Date | number) {
         super(guid, dateTaken, dateOrder);
-        this.text = text ?? 'Et eirmod clita sed facilisi aliquam nobis sed erat. Dolore sit accusam et consequat lorem sit delenit sanctus commodo dolore eirmod suscipit diam. Iriure sadipscing consetetur justo.' +
-            'Et eirmod clita sed facilisi aliquam nobis sed erat. Dolore sit accusam et consequat lorem sit delenit sanctus commodo dolore eirmod suscipit diam. Iriure sadipscing consetetur justo.' +
-            't eirmod clita sed facilisi aliquam nobis sed erat. Dolore sit accusam et consequat lorem sit delenit sanctus commodo dolore eirmod suscipit diam. Iriure sadipscing consetetur justo.' +
-            't eirmod clita sed facilisi aliquam nobis sed erat. Dolore sit accusam et consequat lorem sit delenit sanctus commodo dolore eirmod suscipit diam. Iriure sadipscing consetetur justo.';
+        this.text = text ?? 'Et eirmod clita sed facilisi aliquam nobis sed erat';
+        // . Dolore sit accusam et consequat lorem sit delenit sanctus commodo dolore eirmod suscipit diam. Iriure sadipscing consetetur justo.' +
+        //     'Et eirmod clita sed facilisi aliquam nobis sed erat. Dolore sit accusam et consequat lorem sit delenit sanctus commodo dolore eirmod suscipit diam. Iriure sadipscing consetetur justo.' +
+        //     't eirmod clita sed facilisi aliquam nobis sed erat. Dolore sit accusam et consequat lorem sit delenit sanctus commodo dolore eirmod suscipit diam. Iriure sadipscing consetetur justo.' +
+        //     't eirmod clita sed facilisi aliquam nobis sed erat. Dolore sit accusam et consequat lorem sit delenit sanctus commodo dolore eirmod suscipit diam. Iriure sadipscing consetetur justo.';
         this.kind = EntryKind.Note;
     }
 }
