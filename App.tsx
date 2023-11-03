@@ -135,10 +135,15 @@ export default function App() {
     // Define position state: {latitude: number, longitude: number}
     const [position, setPosition] = useState(null)
     const [logs, setLogs] = useState<string[]>([]);
+    const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
 
     useEffect(() => {
-
         const fff = async() =>{
+            const trackInfo = await FileSystem.getInfoAsync(TRACK_FILE);
+            if(!trackInfo.exists){
+                await FileSystem.makeDirectoryAsync(TRACK_DIRECTORY);
+                await FileSystem.writeAsStringAsync(TRACK_FILE,'');
+            }
             const log = await FileSystem.readAsStringAsync(TRACK_FILE);
             const lines = log.split('\n', 1000);
             setLogs(lines);
@@ -213,6 +218,7 @@ export default function App() {
         await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
             // For better logs, we set the accuracy to the most sensitive option
             accuracy: Location.Accuracy.Balanced,
+            showsBackgroundLocationIndicator: true,
             // Make sure to enable this notification if you want to consistently track in the background
             foregroundService: {
                 notificationTitle: "Location1",
