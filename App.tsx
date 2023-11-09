@@ -105,6 +105,8 @@ import {Camera, CameraType} from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import {useCameraPermissions} from 'expo-image-picker';
 import {StorageAccessFramework} from "expo-file-system";
+import {FlashList} from "@shopify/flash-list";
+import {LocationObjectCoords} from "expo-location";
 
 const LOCATION_TASK_NAME = "BACKGROUND_LOCATION_TASK"
 const TRACK_DIRECTORY = FileSystem.documentDirectory + 'track/'
@@ -151,18 +153,13 @@ async function writeLog(timeStamp: number, location: string) {
 
 export default function App() {
     // Define position state: {latitude: number, longitude: number}
+    const [points, setPoints] = useState<[number[]]>();
     const [position, setPosition] = useState(null)
     const [logs, setLogs] = useState<string[]>([]);
     const [permissionResponse, requestPermission] = MediaLibrary.usePermissions({writeOnly: true})
     const [permission1, requestPermission1] = Camera.useCameraPermissions();
     const imagePermission = ImagePicker.getMediaLibraryPermissionsAsync();
     const [status, requestPermissions] = useCameraPermissions();
-
-    requestPermission();
-    requestPermission1();
-    console.log(permissionResponse)
-    console.log(permission1)
-
 
     MapLibreGL.setAccessToken(null);
 
@@ -176,6 +173,14 @@ export default function App() {
             const log = await FileSystem.readAsStringAsync(TRACK_FILE);
             const lines = log.split('\n', 1000);
             setLogs(lines);
+
+            const deserPoints: [number[]] = [];
+            for (const line of lines) {
+                const coord: LocationObjectCoords = JSON.parse(line);
+                deserPoints.push([coord.longitude,coord.latitude]);
+            }
+            console.log(deserPoints);
+            setPoints([...deserPoints]);
         }
         fff();
 
@@ -271,8 +276,6 @@ export default function App() {
 
     const clearLog = async () => {
         await FileSystem.writeAsStringAsync(TRACK_FILE, '');
-        let r = 'adasd';
-        let rrr = 123;
         setLogs([]);
     }
 
@@ -342,31 +345,44 @@ export default function App() {
                 title="Clear LOG"
                 color="red"
             />
+            <View style={styles.separator}/>
             <Button
                 onPress={saveLog}
                 title="Save log to docs"
                 color="red"
             />
             <Text>{logs.length}</Text>
-            {/*<MapLibreGL.MapView*/}
-            {/*    style={styles.map}*/}
-            {/*    logoEnabled={false}*/}
-            {/*>*/}
-            {/*    <MapLibreGL.MarkerView coordinate={[23.755750, 52.094461]} id="pt-ann11" title={'ssssss'}>*/}
-            {/*        <AnnotationContent title={'Some point'}/>*/}
-            {/*    </MapLibreGL.MarkerView>*/}
+            <MapLibreGL.MapView
+                style={styles.map}
+                styleURL={'https://maps.geoapify.com/v1/styles/osm-carto/style.json?apiKey=9be25934f5c84687bb23c73c9e90ecfa\n'}
+                logoEnabled={false}>
 
-            {/*    /!*<MapLibreGL.PointAnnotation*!/*/}
-            {/*    /!*    coordinate={[52.094461, 23.755750]}*!/*/}
-            {/*    /!*    id="pt-ann">*!/*/}
-            {/*    /!*    <Text>Annotation</Text>*!/*/}
-            {/*    /!*</MapLibreGL.PointAnnotation>*!/*/}
-            {/*</MapLibreGL.MapView>*/}
+                <MapLibreGL.PointAnnotation coordinate={[25.953835, 53.122418]} id={'dgfdfg'}>
+                    {/*<TouchableOpacity style={styles.touchable}>*/}
+                    {/*</TouchableOpacity>*/}
+                </MapLibreGL.PointAnnotation>
+                {points &&
+                    points.map((p, index) =>
+                        // <MapLibreGL.PointAnnotation id={index.toString()} coordinate={[p[0],p[1]]} key={index.toString()}>
+                        //     <TouchableOpacity style={styles.touchable}>
+                        //         <Text style={styles.touchableText}>Btn</Text>
+                        //     </TouchableOpacity>
+                        // </MapLibreGL.PointAnnotation>)
+                        <MapLibreGL.PointAnnotation coordinate={[p[0], p[1]]} id={index.toString()} title={'ssssss'} key={index.toString()}>
+                        </MapLibreGL.PointAnnotation>)
+                }
+
+                {/*<MapLibreGL.PointAnnotation*/}
+                {/*    coordinate={[52.094461, 23.755750]}*/}
+                {/*    id="pt-ann">*/}
+                {/*    <Text>Annotation</Text>*/}
+                {/*</MapLibreGL.PointAnnotation>*/}
+            </MapLibreGL.MapView>
             {/*<FlashList*/}
             {/*    disableHorizontalListHeightMeasurement={true}*/}
             {/*    estimatedItemSize={50}*/}
             {/*    data={logs}*/}
-            {/*    renderItem={({item, index}) => <Text numberOfLines={3}*/}
+            {/*    renderItem={({item, index}) => <Text numberOfLines={4}*/}
             {/*                                         style={{fontSize: 14, paddingTop:10, flexWrap: 'wrap'}}>{item}</Text>}*/}
             {/*/>*/}
         </View>
@@ -395,7 +411,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        paddingTop: 50,
+        paddingTop: 20,
     },
     switchContainer: {
         flexDirection: "row",
