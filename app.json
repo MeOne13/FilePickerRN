@@ -20,6 +20,7 @@
     },
     "android": {
       "permissions": [
+        "CAMERA_ROLL",
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION",
@@ -40,6 +41,20 @@
     },
     "plugins": [
       [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ],
+      [
         "expo-location",
         {
           "isAndroidBackgroundLocationEnabled": true,
@@ -53,7 +68,8 @@
       "eas": {
         "projectId": "37c97da3-f68a-40e7-b7c2-f9628188e205"
       }
-    }
+    },
+    "entryPoint": ".vscode/exponentIndex.js"
   },
   "name": "rntx"
 }

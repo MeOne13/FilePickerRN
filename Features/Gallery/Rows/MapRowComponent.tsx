@@ -14,6 +14,7 @@ export function MapRowComponent({row}: MapRowComponentProps) {
             <MapLibreGL.MapView
                 style={styles.map}
                 logoEnabled={false}
+
             />
             <Text style={{height: 100}}>Items</Text>
         </View>

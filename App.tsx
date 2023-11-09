@@ -94,17 +94,35 @@
 
 
 import React, {useEffect, useState} from "react"
-import {Button, StyleSheet, Text, View} from "react-native"
+import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native"
 import * as TaskManager from "expo-task-manager"
 import * as Location from "expo-location"
-import {LocationActivityType} from "expo-location"
 import * as FileSystem from 'expo-file-system';
-import {FlashList} from "@shopify/flash-list";
+import * as MediaLibrary from 'expo-media-library';
+import MapLibreGL from "@maplibre/maplibre-react-native";
+import PropTypes from "prop-types";
+import {Camera, CameraType} from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
+import {useCameraPermissions} from 'expo-image-picker';
+import {StorageAccessFramework} from "expo-file-system";
 
 const LOCATION_TASK_NAME = "BACKGROUND_LOCATION_TASK"
 const TRACK_DIRECTORY = FileSystem.documentDirectory + 'track/'
 const TRACK_FILE = FileSystem.documentDirectory + 'track/track.json'
 let foregroundSubscription = null
+const AnnotationContent = ({title}) => {
+    return (
+        // <View style={styles.touchableContainer}>
+        <View>
+            <TouchableOpacity style={styles.touchable}>
+                <Text style={styles.touchableText}>Btn</Text>
+            </TouchableOpacity>
+        </View>
+    );
+};
+AnnotationContent.propTypes = {
+    title: PropTypes.string,
+};
 
 // Define the background task for location tracking
 TaskManager.defineTask(LOCATION_TASK_NAME, async ({data, error}) => {
@@ -135,14 +153,25 @@ export default function App() {
     // Define position state: {latitude: number, longitude: number}
     const [position, setPosition] = useState(null)
     const [logs, setLogs] = useState<string[]>([]);
-    const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
+    const [permissionResponse, requestPermission] = MediaLibrary.usePermissions({writeOnly: true})
+    const [permission1, requestPermission1] = Camera.useCameraPermissions();
+    const imagePermission = ImagePicker.getMediaLibraryPermissionsAsync();
+    const [status, requestPermissions] = useCameraPermissions();
+
+    requestPermission();
+    requestPermission1();
+    console.log(permissionResponse)
+    console.log(permission1)
+
+
+    MapLibreGL.setAccessToken(null);
 
     useEffect(() => {
-        const fff = async() =>{
+        const fff = async () => {
             const trackInfo = await FileSystem.getInfoAsync(TRACK_FILE);
-            if(!trackInfo.exists){
+            if (!trackInfo.exists) {
                 await FileSystem.makeDirectoryAsync(TRACK_DIRECTORY);
-                await FileSystem.writeAsStringAsync(TRACK_FILE,'');
+                await FileSystem.writeAsStringAsync(TRACK_FILE, '');
             }
             const log = await FileSystem.readAsStringAsync(TRACK_FILE);
             const lines = log.split('\n', 1000);
@@ -242,8 +271,43 @@ export default function App() {
 
     const clearLog = async () => {
         await FileSystem.writeAsStringAsync(TRACK_FILE, '');
+        let r = 'adasd';
+        let rrr = 123;
         setLogs([]);
     }
+
+    async function saveLog() {
+        try {
+            // const newPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            // console.log(TRACK_FILE)
+            // await MediaLibrary.getPermissionsAsync();
+
+            const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+            if (permissions.granted) {
+                const uri = await StorageAccessFramework.createFileAsync(permissions.directoryUri, 'track', 'application/json')
+                console.log(uri);
+                if (uri) {
+                    const content = await FileSystem.readAsStringAsync(TRACK_FILE);
+                    console.log(content);
+                    await FileSystem.writeAsStringAsync(uri, content);
+                }
+            }
+            // const asset = await MediaLibrary.createAssetAsync(uri);
+            // console.log(asset);
+            // const album = await MediaLibrary.getAlbumAsync('Documents');
+            // console.log(album)
+            // const asset = await MediaLibrary.createAssetAsync(TRACK_FILE);
+            // console.log('After create')
+            // if (album == null) {
+            //     await MediaLibrary.createAlbumAsync('Documents1', asset, false);
+            // } else {
+            //     await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+            // }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Text>Longitude: {position?.longitude}</Text>
@@ -278,23 +342,60 @@ export default function App() {
                 title="Clear LOG"
                 color="red"
             />
-            <Text>{logs.length}</Text>
-            <FlashList
-                disableHorizontalListHeightMeasurement={true}
-                estimatedItemSize={50}
-                data={logs}
-                renderItem={({item, index}) => <Text numberOfLines={3}
-                                                     style={{fontSize: 14, paddingTop:10, flexWrap: 'wrap'}}>{item}</Text>}
+            <Button
+                onPress={saveLog}
+                title="Save log to docs"
+                color="red"
             />
+            <Text>{logs.length}</Text>
+            {/*<MapLibreGL.MapView*/}
+            {/*    style={styles.map}*/}
+            {/*    logoEnabled={false}*/}
+            {/*>*/}
+            {/*    <MapLibreGL.MarkerView coordinate={[23.755750, 52.094461]} id="pt-ann11" title={'ssssss'}>*/}
+            {/*        <AnnotationContent title={'Some point'}/>*/}
+            {/*    </MapLibreGL.MarkerView>*/}
+
+            {/*    /!*<MapLibreGL.PointAnnotation*!/*/}
+            {/*    /!*    coordinate={[52.094461, 23.755750]}*!/*/}
+            {/*    /!*    id="pt-ann">*!/*/}
+            {/*    /!*    <Text>Annotation</Text>*!/*/}
+            {/*    /!*</MapLibreGL.PointAnnotation>*!/*/}
+            {/*</MapLibreGL.MapView>*/}
+            {/*<FlashList*/}
+            {/*    disableHorizontalListHeightMeasurement={true}*/}
+            {/*    estimatedItemSize={50}*/}
+            {/*    data={logs}*/}
+            {/*    renderItem={({item, index}) => <Text numberOfLines={3}*/}
+            {/*                                         style={{fontSize: 14, paddingTop:10, flexWrap: 'wrap'}}>{item}</Text>}*/}
+            {/*/>*/}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    touchableContainer: {borderColor: 'black', borderWidth: 1.0, width: 60},
+    touchable: {
+        backgroundColor: 'blue',
+        width: 4,
+        height: 4,
+        borderRadius: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    touchableText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    map: {
+        flex: 1,
+        height: 300,
+        alignSelf: 'stretch',
+    },
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        paddingTop:50,
+        paddingTop: 50,
     },
     switchContainer: {
         flexDirection: "row",

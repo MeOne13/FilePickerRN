@@ -4358,6 +4358,13 @@ expo-background-fetch@~11.3.0:
   dependencies:
     expo-task-manager "~11.3.0"
 
+expo-camera@~13.4.4:
+  version "13.4.4"
+  resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-13.4.4.tgz#e01ead31a3150398d37e94c307f6937480680690"
+  integrity sha512-7k54APbpSulUDR2CrD5SrmKjCdfdg4tqKRpbBOKc2J2MIBHhunExU77435JDYSejHRY5bfRHZsEp3yKwR862uw==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-constants@~14.4.2:
   version "14.4.2"
   resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-14.4.2.tgz"
@@ -4503,6 +4510,11 @@ expo-modules-core@1.5.11:
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
+
+expo-permissions@~14.2.1:
+  version "14.2.1"
+  resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-14.2.1.tgz#da4a7ef45e13da99032960528267cc9ca8e964b8"
+  integrity sha512-jXGnOODtDMFvK7cwo7wIRPcnA7m1bie80gJ5BdL6Vs5kgCU7+RCLOCp3sBw7TKRPIlVMmQDhZA62bGzoBV0hkA==
 
 expo-splash-screen@~0.20.5:
   version "0.20.5"

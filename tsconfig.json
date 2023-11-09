@@ -1,8 +1,8 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "sourceMap": true,
-    "sourceRoot": "/home/volodik/Work/Projects/Traveldeck/Experiments/",
+    // "sourceMap": true,
+    // "sourceRoot": "/home/volodik/Work/Projects/Traveldeck/Experiments/",
     "strict": true
   }
 }
